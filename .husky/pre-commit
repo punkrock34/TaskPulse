@@ -1,3 +1,5 @@
+# Pre-commit
+
 ddev pint
 ddev npm run format
 ddev npm run lint

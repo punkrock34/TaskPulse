@@ -1,6 +1,14 @@
 # TaskPulse
 
-TaskPulse is a web application built with Laravel and Vite, utilizing ddev for local development.
+TaskPulse is a web application built with Laravel and Vite, utilizing ddev for local development. It helps manage tasks efficiently with a user-friendly interface.
+
+## Features
+
+- User Authentication and Authorization via Firebase
+- Task CRUD operations
+- Task labeling
+- Task status
+- Due date notification system
 
 ## Quick Start
 
@@ -11,8 +19,9 @@ TaskPulse is a web application built with Laravel and Vite, utilizing ddev for l
 5. Install dependencies: `ddev composer update && ddev npm install`
 6. Copy the environment file: `cp .env.example .env`
 7. Launch the application:
-    - Terminal 1: ddev npm run dev
-    - Terminal 2: ddev launch or go to <https://taskpulse.ddev.site>
+   - Terminal 1: `ddev npm run dev`
+   - Terminal 2: `ddev artisan reverb:start`
+   - Terminal 3: `ddev launch` or go to [https://taskpulse.ddev.site](https://taskpulse.ddev.site)
 
 For detailed setup instructions and documentation, please refer to the [docs](./docs) folder.
 
@@ -20,15 +29,18 @@ For detailed setup instructions and documentation, please refer to the [docs](./
 
 - [Installation Guide](./docs/installation.md)
 - [Development Setup](./docs/development.md)
-- [Module Documentation](./docs/modules/)
-  - [Laravel Reverb](./docs/modules/laravel-reverb.md)
-  - [Vite](./docs/modules/vite.md)
-- [Troubleshooting](./docs/troubleshooting.md)
+
+## Technologies Used
+
+- Laravel
+- Vite
+- ddev
+- Docker
 
 ## Contributing
 
-[Add information about how to contribute to the project]
+Contributions are welcome! Please fork the repository and submit pull requests.
 
 ## License
 
-[Add license information]
+This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.

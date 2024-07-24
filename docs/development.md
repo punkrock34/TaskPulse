@@ -1,4 +1,16 @@
+
 # Development Guide
+
+## Table of Contents
+
+- [Environment Setup](#environment-setup)
+- [Development Workflow](#development-workflow)
+- [Useful Commands](#useful-commands)
+- [Debugging](#debugging)
+  - [PHP XDebug](#php-xdebug)
+- [Code Style and Linting](#code-style-and-linting)
+- [Database Management](#database-management)
+- [Troubleshooting](#troubleshooting)
 
 ## Environment Setup
 
@@ -28,31 +40,31 @@ Ensure you've completed all steps in the [Installation Guide](installation.md) b
 
 5. **Commit your changes and push to the repository**
 
-## Useful commands
+## Useful Commands
 
 - Artisan Commands
 
-```sh
-ddev artisan [command]
-```
+    ```sh
+    ddev artisan [command]
+    ```
 
-Example: ```ddev artisan make:controller UserController```
+    Example: `ddev artisan make:controller UserController`
 
 - Composer Commands
 
-```sh
-ddev composer [command]
-```
+    ```sh
+    ddev composer [command]
+    ```
 
-Example: ```ddev composer require laravel/lighthouse```
+    Example: `ddev composer require laravel/lighthouse`
 
 - NPM Commands
 
-```sh
-ddev npm [command]
-```
+    ```sh
+    ddev npm [command]
+    ```
 
-Example: ```ddev npm run dev```
+    Example: `ddev npm run dev`
 
 ## Debugging
 
@@ -64,7 +76,8 @@ Example: ```ddev npm run dev```
     ddev xdebug on
     ```
 
-2. **Configure your IDE to listen for PHP Debug connections.(Repository has .vscode configured for port 9003 check .vscode/launch.json)**
+2. **Configure your IDE to listen for PHP Debug connections.**
+   (Repository has .vscode configured for port 9003 check .vscode/launch.json)
 
 3. **Set breakpoints in your code.**
 
@@ -78,13 +91,13 @@ Example: ```ddev npm run dev```
 
 ### Code Style and Linting
 
-We use laravel Pint for PHP code styling. To run Pint:
+We use Laravel Pint for PHP code styling. To run Pint:
 
 ```sh
 ddev pint
 ```
 
-### Database Management
+## Database Management
 
 To access the database via CLI:
 
@@ -94,19 +107,19 @@ ddev mysql
 
 For a GUI interface:
 
-#### heidisql
+### HeidiSQL
 
 ```sh
 ddev heidisql
 ```
 
-#### phpmyadmin
+### phpMyAdmin
 
 ```sh
 ddev launch -p
 ```
 
-### Troubleshooting
+## Troubleshooting
 
 If you encounter any issues, try the following:
 
@@ -126,4 +139,6 @@ If you encounter any issues, try the following:
 
 If problems persist, please check the issue tracker or create a new issue.
 
-This `development.md` covers the basic workflow, useful commands, debugging setup, code style enforcement, database management, and troubleshooting steps. You may want to customize this further based on your project's specific needs and workflows.
+---
+
+This `development.md` covers the basic workflow, useful commands, debugging setup, code style enforcement, database management, and troubleshooting steps.
