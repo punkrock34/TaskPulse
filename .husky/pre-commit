@@ -1,14 +1,4 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-
-# Run Laravel Pint for code style checks on the backend
 ddev pint
-
-# Run Prettier for code formatting
 ddev npm run format
-
-# Run ESLint for code style checks on the frontend
 ddev npm run lint
-
-# Run Laravel tests for the backend
 ddev artisan test
