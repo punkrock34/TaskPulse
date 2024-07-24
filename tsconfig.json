@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+        "target": "esnext",
+        "module": "esnext",
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "strict": true,
+        "jsx": "preserve",
+        "sourceMap": true,
+        "resolveJsonModule": true,
+        "baseUrl": ".",
+        "paths": {
+            "@/*": ["resources/typescript/*"]
+        }
+    },
+    "include": ["resources/typescript/**/*.ts", "resources/typescript/**/*.tsx"],
+    "exclude": ["node_modules"]
+}

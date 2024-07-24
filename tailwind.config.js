@@ -1,15 +1,15 @@
 /** @type {import('tailwindcss').Config} */
 export default {
     content: [
-        "./resources/**/*.blade.php",
-        "./resources/**/*.js",
-        "./resources/**/*.vue",
-        "./node_modules/flowbite/**/*.js",
+        './resources/**/*.blade.php',
+        './resources/**/*.js',
+        './resources/**/*.vue',
+        './resources/**/*.ts',
+        './resources/**/*.tsx',
+        './node_modules/flowbite/**/*.js'
     ],
     theme: {
-        extend: {},
+        extend: {}
     },
-    plugins: [
-        require("flowbite/plugin"),
-    ],
+    plugins: [require('flowbite/plugin')]
 }
