@@ -1,66 +1,98 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# TaskPulse
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Overview
 
-## About Laravel
+TaskPulse is a web application built with Laravel and Vite, utilizing ddev for local development. It provides [brief description of what TaskPulse does].
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Prerequisites
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Before you begin, ensure you have the following:
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **ddev**: An open-source tool for launching local web development environments.
+- **Docker**: Required by ddev. You can use Docker Desktop or any other Docker provider.
 
-## Learning Laravel
+## Installation
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### 1. Install ddev
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+#### macOS and Linux
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+1. **Install Homebrew** (if not already installed):
 
-## Laravel Sponsors
+   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+2. **Install Docker** (if not already installed):
 
-### Premium Partners
+   For macOS: Install Docker Desktop from https://www.docker.com/products/docker-desktop
+   
+   For Linux: Follow the Docker installation guide at https://docs.docker.com/engine/install/ for your distribution
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+3. **Install ddev**:
 
-## Contributing
+   brew install ddev/ddev/ddev
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+#### Windows
 
-## Code of Conduct
+1. Install Docker Desktop from https://www.docker.com/products/docker-desktop
+2. Install ddev by following the guide at https://ddev.readthedocs.io/en/stable/users/install/ddev-installation/
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 2. Set up the project
 
-## Security Vulnerabilities
+1. Clone the repository:
+   git clone https://github.com/punkrock34/TaskPulse.git
+   cd taskpulse
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+2. Copy the example environment file:
+   cp .env.example .env
 
-## License
+3. Start the ddev environment:
+   ddev start
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+4. Install Composer dependencies:
+   ddev composer update
+
+5. Install NPM dependencies:
+   ddev npm install
+
+## Usage
+
+1. Start the ddev environment (if not already running):
+   ddev start
+
+2. Run Vite development server:
+   ddev npm run dev
+
+3. Launch the application in your default web browser:
+   ddev launch
+
+## Development
+
+### Using Xdebug
+
+ddev comes with Xdebug pre-installed but disabled by default. To use Xdebug:
+
+1. Enable Xdebug:
+   ddev xdebug on
+
+2. Configure your IDE to listen for PHP Debug connections. (.vscode exists in repository already for phpstorm research official documentation)
+
+3. Set breakpoints in your code.
+
+4. Start debugging in your IDE.
+
+5. When finished, you can disable Xdebug to improve performance:
+   ddev xdebug off
+
+For more detailed Xdebug configuration, refer to the ddev documentation: https://ddev.readthedocs.io/en/stable/users/debugging-profiling/step-debugging/
+
+### Other Development Commands
+
+- To stop the ddev environment:
+  ddev stop
+
+- To run artisan commands:
+  ddev artisan [command]
+
+## Additional Information
+
+[Add any other relevant information about your project, such as features, contribution guidelines, or licensing]
