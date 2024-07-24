@@ -8,8 +8,8 @@ export default {
         './resources/**/*.tsx',
         './node_modules/flowbite/**/*.js'
     ],
-    theme: {
-        extend: {}
-    },
-    plugins: [require('flowbite/plugin')]
+    darkMode: 'class',
+    plugins: [
+        require('flowbite/plugin')
+    ]
 }
