@@ -3,23 +3,57 @@
         <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 text-center">
             Sign up for an account
         </h1>
-        <form class="space-y-4" action="#" method="POST">
+
+        <!-- Include the alerts component -->
+        @include('components.alerts')
+
+        <form class="space-y-4" action="{{ route('register.post') }}" method="POST">
             @csrf
             <div>
                 <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your name</label>
-                <input type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="John Doe" required>
+                <input type="text" name="name" id="name" class="bg-gray-50 border text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white @error('name') has-error @enderror" placeholder="John Doe" value="{{ old('name') }}" required>
             </div>
             <div>
                 <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
-                <input type="email" name="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="name@company.com" required>
+                <input type="email" name="email" id="email" class="bg-gray-50 border text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white @error('email') has-error @enderror" placeholder="name@company.com" value="{{ old('email') }}" required>
             </div>
-            <div>
+            <div class="relative">
                 <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
-                <input type="password" name="password" id="password" placeholder="••••••••" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" required>
+                <input type="password" name="password" id="password" placeholder="••••••••" class="bg-gray-50 border text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white @error('password') has-error @enderror" required>
+
+                <!-- eye icon -->
+                <div class="absolute inset-y-0 right-0 flex items-center pr-2 -bottom-7">
+                    <button type="button" id="togglePassword" class="text-gray-400 focus:outline-none dark:text-gray-500">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
             </div>
-            <div>
+            <div class="relative">
                 <label for="password_confirmation" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirm password</label>
-                <input type="password" name="password_confirmation" id="password_confirmation" placeholder="••••••••" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" required>
+                <input type="password" name="password_confirmation" id="password_confirmation" placeholder="••••••••" class="bg-gray-50 border text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white @error('password') has-error @enderror @error('password_confirmation') has-error @enderror" required>
+
+                <!-- eye icon -->
+                <div class="absolute inset-y-0 right-0 flex items-center pr-2 -bottom-7">
+                    <button type="button" id="togglePasswordConfirmation" class="text-gray-400 focus:outline-none dark:text-gray-500">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- password strength indicator -->
+            <div class="flex items-center justify-between">
+                <div class="flex items" id="password-strength-indicator">
+                    <div class="w-2 h-2 bg-red-500 rounded-full mr-1 opacity-100"></div>
+                    <div class="w-2 h-2 bg-yellow-500 rounded-full mr-1 opacity-30"></div>
+                    <div class="w-2 h-2 bg-green-500 rounded-full opacity-30"></div>
+                </div>
+            </div>
+            <div class="flex items-center justify-between">
+                <div class="flex items-start">
+                    <div class="flex items">
+                        <input id="terms" type="checkbox" value="" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800" required>
+                    </div>
+                    <label for="terms" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">I agree to the <a href="#" class="text-blue-700 hover:underline dark:text-blue-500">terms and conditions</a></label>
+                </div>
             </div>
             <div class="flex items-center justify-between">
                 <div class="flex items-start">

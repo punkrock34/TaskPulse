@@ -4,31 +4,10 @@
             Request a password reset
         </h1>
 
-        <!-- Display Status Message -->
-        @if (session('status'))
-            <div class="mb-4 text-sm text-green-600 dark:text-green-400">
-                {{ session('status') }}
-            </div>
-        @endif
+        <!-- Include the alerts component -->
+        @include('components.alerts')
 
-        @if (session('error'))
-            <div class="mb-4 text-sm text-red-600 dark:text-red-400">
-                {{ session('error') }}
-            </div>
-        @endif
-
-        <!-- Display Validation Errors -->
-        @if ($errors->any())
-            <div class="mb-4 text-sm text-red-600 dark:text-red-400">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-
-        <form class="space-y-4" action="{{ route('reset-password.request.send') }}" method="POST">
+        <form class="space-y-4" action="{{ route('reset-password.request.post') }}" method="POST">
             @csrf
             <div>
                 <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>

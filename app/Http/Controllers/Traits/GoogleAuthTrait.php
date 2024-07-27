@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Traits;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Kreait\Firebase\Auth as FirebaseAuth;
 use Kreait\Firebase\Exception\Auth\FailedToVerifyToken;
 use Kreait\Firebase\Exception\Auth\RevokedIdToken;
 
-class AuthController extends Controller
+trait GoogleAuthTrait
 {
     protected $auth;
 
@@ -17,7 +16,7 @@ class AuthController extends Controller
         $this->auth = $auth;
     }
 
-    public function verifyIdToken(Request $request)
+    public function handleGoogleLogin(Request $request)
     {
         $idToken = $request->input('idToken');
 
@@ -26,13 +25,11 @@ class AuthController extends Controller
             $uid = $verifiedIdToken->claims()->get('sub');
 
             // Use the UID to fetch user information from your database or create a new user.
-            // TODO: @Gogu20 - Sync user here most likely idk you do your graphql shit ❤️
 
-            return response()->json(['uid' => $uid]);
-        } catch (FailedToVerifyToken|RevokedIdToken $e) {
-            Log::error("Error verifying Firebase id token: {$e->getMessage()}");
-
+        } catch (FailedToVerifyToken|RevokedIdToken) {
             return response()->json(['error' => 'Invalid ID token'], 401);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 }

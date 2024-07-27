@@ -3,6 +3,10 @@
         <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 text-center">
             Log in to your account
         </h1>
+
+        <!-- Include the alerts component -->
+        @include('components.alerts')
+
         <form class="space-y-4" action="#" method="POST">
             @csrf
             <div>

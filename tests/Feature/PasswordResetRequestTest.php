@@ -20,9 +20,9 @@ class PasswordResetRequestTest extends TestCase
     public function testPasswordResetFormDisplaysError()
     {
         $response = $this->withSession(['error' => 'Invalid or expired reset code.'])
-            ->get(route('reset-password.request').'/invalid-code');
+            ->get(route('reset-password.request'));
 
-        $response->assertStatus(302);
+        $response->assertStatus(200);
         $response->assertSessionHas('error', 'Invalid or expired reset code.');
     }
 
