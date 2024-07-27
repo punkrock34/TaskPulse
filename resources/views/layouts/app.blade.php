@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ config('app.name', 'TaskPulse') }}</title>
+    <title>{{ isset($title) ? $title . ' | ' : '' }}{{ config('app.name', 'TaskPulse') }}</title>
     @vite('resources/css/app.css')
     <script>
         // It's best to inline this in `head` to avoid FOUC (flash of unstyled content) when changing pages or themes
@@ -19,13 +19,13 @@
         } else {
             document.documentElement.classList.remove('dark');
         }
-</script>
+    </script>
 </head>
 
-<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+<body class="flex flex-col min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
     <x-header />
 
-    <main>
+    <main class="flex-grow flex">
         @yield('content')
     </main>
 

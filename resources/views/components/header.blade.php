@@ -1,4 +1,4 @@
-<header class="bg-white dark:bg-gray-900 p-4 text-gray-900 dark:text-white">
+<header class="bg-white dark:bg-gray-900 p-4 text-gray-900 dark:text-white theme-transition">
     <div class="container mx-auto flex justify-between items-center">
         <h1 class="text-2xl font-bold">TaskPulse</h1>
         <button

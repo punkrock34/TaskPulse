@@ -1,5 +1,5 @@
 @extends('layouts.app')
 
 @section('content')
-    <x-auth.login-form />
+    <x-auth.reset-password-request-form />
 @endsection
