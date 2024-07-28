@@ -1,22 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Kreait\Firebase\Auth as FirebaseAuth;
 use Kreait\Firebase\Exception\Auth\FailedToVerifyToken;
 use Kreait\Firebase\Exception\Auth\RevokedIdToken;
 
-class AuthController extends Controller
+class VerifyTokenController extends AuthController
 {
-    protected $auth;
-
-    public function __construct(FirebaseAuth $auth)
-    {
-        $this->auth = $auth;
-    }
-
     public function verifyIdToken(Request $request)
     {
         $idToken = $request->input('idToken');

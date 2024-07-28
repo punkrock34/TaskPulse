@@ -30,7 +30,7 @@ class ValidateFirebaseResetCode
         } catch (\Exception $e) {
             Log::error("Error verifying Firebase reset code: {$e->getMessage()}");
 
-            return redirect()->route('reset-password.request')->with('error', 'Invalid or expired reset code.');
+            return redirect('/forgot-password')->with('error', 'Invalid or expired reset code.');
         }
 
         return $next($request);

@@ -11,28 +11,33 @@ class PasswordResetRequestTest extends TestCase
 
     public function testPasswordResetRequestPageLoads()
     {
-        $response = $this->get(route('reset-password.request'));
+        $response = $this->get('/forgot-password');
 
         $response->assertStatus(200);
-        $response->assertViewIs('auth.reset-password.request');
+        // Since you're using Vue, there's no view to check.
     }
 
     public function testPasswordResetFormDisplaysError()
     {
         $response = $this->withSession(['error' => 'Invalid or expired reset code.'])
-            ->get(route('reset-password.request'));
+            ->get('/forgot-password');
 
         $response->assertStatus(200);
-        $response->assertSessionHas('error', 'Invalid or expired reset code.');
+        $response->assertSee('Invalid or expired reset code.');
     }
 
     public function testPasswordResetFormSubmitsSuccessfully()
     {
-        $response = $this->post(route('reset-password.request'), [
+        // Assuming you have a user in the database to test with.
+        $user = \App\Models\User::factory()->create([
             'email' => 'test@example.com',
         ]);
 
-        $response->assertStatus(302);
-        $response->assertSessionHasNoErrors();
+        $response = $this->postJson('/api/password-reset', [
+            'email' => 'test@example.com',
+        ]);
+
+        $response->assertStatus(200);
+        $response->assertJson(['message' => 'Password reset link sent to your email']);
     }
 }
