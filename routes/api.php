@@ -8,6 +8,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/login', [LoginController::class, 'loginUser']);
 Route::post('/register', [RegisterController::class, 'registerUser']);
-Route::post('/password-reset', [PasswordResetController::class, 'requestPasswordReset']);
+Route::post('/forgot-password', [PasswordResetController::class, 'requestPasswordReset']);
 Route::post('/reset-password', [PasswordResetController::class, 'resetPassword']);
 Route::post('/verify-token', [VerifyTokenController::class, 'verifyIdToken']);

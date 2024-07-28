@@ -16,7 +16,8 @@ class LoginController extends AuthController
         $password = $request->input('password');
 
         try {
-            $this->auth->signInWithEmailAndPassword($email, $password);
+            $signInResult = $this->auth->signInWithEmailAndPassword($email, $password);
+            session(['token' => $signInResult->idToken()]);
 
             return response()->json(['message' => 'User signed in successfully']);
         } catch (FailedToSignIn $e) {

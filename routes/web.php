@@ -3,7 +3,7 @@
 use App\Http\Middleware\ValidateFirebaseResetCode;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/reset-password/{code}', function () {
+Route::get('/reset-password/{code?}', function () {
     return view('app');
 })->name('reset-password')->middleware(ValidateFirebaseResetCode::class);
 

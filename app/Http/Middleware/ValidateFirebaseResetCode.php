@@ -25,6 +25,10 @@ class ValidateFirebaseResetCode
     {
         $code = $request->route('code');
 
+        if (! $code) {
+            return redirect('/forgot-password')->with('error', 'Invalid or expired reset code.');
+        }
+
         try {
             $this->auth->verifyPasswordResetCode($code);
         } catch (\Exception $e) {
