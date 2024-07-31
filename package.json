@@ -8,27 +8,33 @@
         "build": "vite build",
         "prepare": "husky"
     },
+    "dependencies": {
+        "@fortawesome/fontawesome-free": "^6.6.0",
+        "@inertiajs/inertia": "^0.11.1",
+        "@inertiajs/inertia-vue3": "^0.6.0",
+        "@inertiajs/vue3": "^1.2.0",
+        "axios": "^1.6.4",
+        "firebase": "^10.12.4",
+        "flowbite": "^2.4.1",
+        "laravel-echo": "^1.16.1",
+        "pusher-js": "^8.4.0-rc2",
+        "tailwindcss": "^3.4.6",
+        "vue": "^3.4.34",
+        "ziggy-js": "^2.3.0"
+    },
     "devDependencies": {
         "@babel/eslint-parser": "^7.25.0",
-        "@fortawesome/fontawesome-free": "^6.6.0",
         "@vitejs/plugin-vue": "^5.1.1",
         "autoprefixer": "^10.4.19",
-        "axios": "^1.6.4",
         "eslint": "^8.57.0",
         "eslint-config-prettier": "^9.1.0",
         "eslint-plugin-prettier": "^5.2.1",
         "eslint-plugin-vue": "^9.27.0",
-        "flowbite": "^2.4.1",
         "husky": "^9.1.1",
-        "laravel-echo": "^1.16.1",
         "laravel-vite-plugin": "^1.0",
         "postcss": "^8.4.39",
         "prettier": "^3.3.3",
-        "pusher-js": "^8.4.0-rc2",
-        "tailwindcss": "^3.4.6",
         "vite": "^5.0",
-        "vue": "^3.4.34",
-        "vue-loader": "^17.4.2",
-        "vue-router": "^4.4.0"
+        "vue-loader": "^17.4.2"
     }
 }

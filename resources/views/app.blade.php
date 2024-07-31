@@ -8,16 +8,10 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @routes
+    @inertiaHead
 </head>
 <body>
-    <div id="app"></div>
-    <script>
-        window.Laravel = {
-            csrfToken: "{{ csrf_token() }}",
-            statusMessage: "{{ session('status') }}",
-            errorMessage: "{{ session('error') }}",
-            errors: <?php echo json_encode($errors->all()); ?>
-        };
-    </script>
+    @inertia
 </body>
 </html>
