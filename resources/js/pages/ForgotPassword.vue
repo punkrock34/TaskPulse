@@ -4,7 +4,7 @@
             <div
                 class="w-full max-w-md p-6 sm:p-8 bg-white dark:bg-gray-800 rounded-lg shadow-md theme-transition"
             >
-                <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 text-center">
+                <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-6 text-center">
                     Forgot Password
                 </h1>
                 <ForgotPasswordForm />

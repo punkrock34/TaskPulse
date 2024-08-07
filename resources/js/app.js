@@ -9,8 +9,9 @@ import { createInertiaApp } from '@inertiajs/vue3'
 import { ZiggyVue } from 'ziggy-js'
 
 // Set up axios CSRF token
-const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken
+axios.defaults.headers.common['X-CSRF-TOKEN'] = document
+    .querySelector('meta[name="csrf-token"]')
+    .getAttribute('content')
 
 createInertiaApp({
     resolve: (name) => {

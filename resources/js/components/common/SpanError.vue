@@ -1,6 +1,6 @@
 <template>
     <transition name="fade-slide" @enter="enter" @leave="leave">
-        <span v-show="hasError" class="text-red-600 text-sm mt-1 block">{{ error }}</span>
+        <span v-show="error" class="text-red-600 text-md mt-1 mb-1 block">{{ error }}</span>
     </transition>
 </template>
 
@@ -8,7 +8,6 @@
 export default {
     name: 'SpanError',
     props: {
-        hasError: { type: Boolean, default: false },
         error: { type: String, default: '' }
     },
     methods: {
@@ -33,7 +32,9 @@ export default {
 <style scoped>
 .fade-slide-enter-active,
 .fade-slide-leave-active {
-    transition: opacity 0.5s ease;
+    transition:
+        opacity 0.5s ease,
+        height 0.5s ease;
 }
 .fade-slide-enter-from,
 .fade-slide-leave-to {

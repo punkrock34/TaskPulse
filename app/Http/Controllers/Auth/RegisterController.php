@@ -2,62 +2,32 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\AbstractInertiaController;
-use App\Http\Requests\RegisterRequest;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\RegisterRequest;
+use App\Services\RegisterService;
 use Inertia\Inertia;
-use Kreait\Firebase\Auth as FirebaseAuth;
-use Kreait\Firebase\Auth\SendActionLink\FailedToSendActionLink;
-use Kreait\Firebase\Exception\AuthException;
-use Kreait\Firebase\Exception\FirebaseException;
 
-class RegisterController extends AbstractInertiaController
+class RegisterController extends Controller
 {
-    public function __construct(protected FirebaseAuth $auth) {}
+    public function __construct(protected RegisterService $registerService) {}
 
-    public function index(Request $request)
+    public function index()
     {
         return Inertia::render('Register');
     }
 
-    public function register(RegisterRequest $request)
+    public function store(RegisterRequest $request)
     {
         try {
-            $request->validated();
-
             $name = $request->input('name');
             $email = $request->input('email');
             $password = $request->input('password');
 
-            $userProperties = [
-                'email' => $email,
-                'emailVerified' => false,
-                'password' => $password,
-                'displayName' => $name,
-                'disabled' => false,
-            ];
+            $this->registerService->register($name, $email, $password);
 
-            $this->auth->createUser($userProperties);
-            $this->auth->sendEmailVerificationLink($email);
-
-            return redirect()->route('login.index')->withStatus('Account created successfully');
-        } catch (FailedToSendActionLink $e) {
-            Log::error("Error sending email verification link: {$e->getMessage()}");
-
-            return response()->json(['error' => 'Error sending email verification link'], 500);
-        } catch (AuthException|FirebaseException $e) {
-            Log::error("Firebase error creating user: {$e->getMessage()}");
-
-            return response()->json([
-                'errors' => [
-                    'email' => 'Email already in use',
-                ],
-            ], 422);
+            return redirect()->route('login.index')->withSuccess('Account created successfully! Please check your email to verify your account, and then login.');
         } catch (\Exception $e) {
-            Log::error("Error creating user: {$e->getMessage()}");
-
-            return response()->json(['error' => 'An error occurred'], 500);
+            return Inertia::render('Register', ['errors' => [$e->getCode() => $e->getMessage()]]);
         }
     }
 }

@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('cache', function (Blueprint $table) {
-            $table->string('key')->primary();
-            $table->mediumText('value');
+        Schema::create('cache', function ($table) {
+            $table->string('key')->unique();
+            $table->text('value');
             $table->integer('expiration');
         });
 

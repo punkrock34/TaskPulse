@@ -15,11 +15,12 @@
                         Or
                     </p>
                 </div>
-                <SocialButton
-                    label="Sign in with Google"
+                <ButtonWithIcon
+                    label="Sign up with Google"
                     icon="https://www.svgrepo.com/show/355037/google.svg"
                     alt="Google logo"
-                    :on-click="signInWithGoogle"
+                    type="button"
+                    @click="signInWithGoogle"
                 />
                 <div class="mt-4 text-sm font-medium text-gray-500 dark:text-gray-300 text-center">
                     Already have an account?
@@ -39,18 +40,29 @@
 import { route } from 'ziggy-js'
 import DefaultLayout from '@/components/layouts/DefaultLayout.vue'
 import RegisterForm from '@/components/forms/RegisterForm.vue'
-import SocialButton from '@/components/buttons/SocialButton.vue'
+import ButtonWithIcon from '@/components/buttons/ButtonWithIcon.vue'
+import { auth, provider, signInWithPopup } from '@/firebase'
+import axios from 'axios'
 
 export default {
     name: 'RegisterPage',
     components: {
         DefaultLayout,
         RegisterForm,
-        SocialButton
+        ButtonWithIcon
     },
     methods: {
-        signInWithGoogle() {
-            // Implement Google sign-in logic
+        async signInWithGoogle() {
+            console.log('Signing in with Google...')
+            try {
+                const result = await signInWithPopup(auth, provider)
+                const idToken = await result.user.getIdToken()
+                await axios.post(route('login.google.store'), { idToken: idToken })
+                window.location.href = route('dashboard.index')
+            } catch (error) {
+                console.error('Google sign-in error', error)
+                alert('Failed to sign in with Google. Please try again.')
+            }
         },
         route
     }

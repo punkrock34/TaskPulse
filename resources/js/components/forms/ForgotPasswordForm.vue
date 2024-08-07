@@ -1,30 +1,38 @@
 <template>
-    <form class="space-y-4" @submit.prevent="forgotPassword">
-        <TextInput
-            id="email"
-            v-model="form.email"
-            label="Email Address"
-            type="email"
-            placeholder="name@company.com"
-            :required="true"
-            :has-error="form.errors.email"
-            :error="form.errors.email"
-        />
-        <SubmitButton label="Send Password Reset Link" />
-    </form>
+    <div>
+        <SpanError :error="form.errors.error" />
+        <SpanSuccess :success="form.success" />
+
+        <form class="space-y-4" @submit.prevent="forgotPassword">
+            <TextInput
+                id="email"
+                v-model="form.email"
+                label="Email Address"
+                type="email"
+                placeholder="name@company.com"
+                :required="true"
+                :error="form.errors.email"
+            />
+            <NormalButton type="submit" label="Send Password Reset Link" />
+        </form>
+    </div>
 </template>
 
 <script>
 import { route } from 'ziggy-js'
 import { useForm } from '@inertiajs/vue3'
 import TextInput from '@/components/inputs/TextInput.vue'
-import SubmitButton from '@/components/buttons/SubmitButton.vue'
+import NormalButton from '@/components/buttons/NormalButton.vue'
+import SpanError from '@/components/common/SpanError.vue'
+import SpanSuccess from '@/components/common/SpanSuccess.vue'
 
 export default {
     name: 'ForgotPasswordForm',
     components: {
         TextInput,
-        SubmitButton
+        NormalButton,
+        SpanError,
+        SpanSuccess
     },
     setup() {
         const form = useForm({
@@ -32,10 +40,10 @@ export default {
         })
 
         const forgotPassword = () => {
-            form.post(route('forgot-password'), {
+            form.post(route('forgot-password.store'), {
                 preserveScroll: true,
-                onSuccess: () => {
-                    form.reset()
+                onSuccess: (response) => {
+                    form.success = response.props.success
                 }
             })
         }

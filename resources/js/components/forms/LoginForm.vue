@@ -1,5 +1,12 @@
 <template>
-    <SpanError :has-error="form.errors.error" :error="form.errors.error" />
+    <SpanError :error="form.errors.error" />
+    <SpanWithActionLink
+        v-show="form.errors.email_not_verified"
+        :pre-action-text="'Please verify your email address. If you did not receive the email, you can'"
+        :action-text="'Resend verification email'"
+        :action-link="resendVerificationEmail"
+    />
+    <SpanSuccess :success="form.success" />
 
     <form class="space-y-4" @submit.prevent="login">
         <TextInput
@@ -9,7 +16,6 @@
             type="email"
             placeholder="name@company.com"
             :required="true"
-            :has-error="form.errors.email"
             :error="form.errors.email"
         />
         <PasswordInput
@@ -18,7 +24,6 @@
             label="Password"
             placeholder="••••••••"
             :required="true"
-            :has-error="form.errors.password"
             :error="form.errors.password"
         />
         <CheckboxInput id="remember" v-model="form.remember" label="Remember me" />
@@ -28,7 +33,7 @@
         >
             Forgot password?
         </a>
-        <SubmitButton label="Sign in" />
+        <NormalButton type="submit" label="Sign in" />
     </form>
 </template>
 
@@ -38,8 +43,11 @@ import { useForm } from '@inertiajs/vue3'
 import TextInput from '@/components/inputs/TextInput.vue'
 import PasswordInput from '@/components/inputs/PasswordInput.vue'
 import CheckboxInput from '@/components/inputs/CheckboxInput.vue'
-import SubmitButton from '@/components/buttons/SubmitButton.vue'
+import NormalButton from '@/components/buttons/NormalButton.vue'
 import SpanError from '@/components/common/SpanError.vue'
+import SpanSuccess from '@/components/common/SpanSuccess.vue'
+import SpanWithActionLink from '@/components/common/SpanWithActionLink.vue'
+import axios from 'axios'
 
 export default {
     name: 'LoginForm',
@@ -47,8 +55,10 @@ export default {
         TextInput,
         PasswordInput,
         CheckboxInput,
-        SubmitButton,
-        SpanError
+        NormalButton,
+        SpanError,
+        SpanSuccess,
+        SpanWithActionLink
     },
     props: {
         forgotPasswordRoute: {
@@ -64,17 +74,36 @@ export default {
         })
 
         const login = () => {
-            form.post(route('login'), {
+            form.post(route('login.store'), {
                 preserveScroll: true,
-                onSuccess: () => {
-                    form.reset()
+                onError: (errors) => {
+                    form.errors.error = errors.error
+                    if (errors.email_not_verified) {
+                        form.errors.email_not_verified = true
+                    }
                 }
             })
         }
 
+        const resendVerificationEmail = async () => {
+            try {
+                const response = await axios.post(route('verification.store'), {
+                    email: form.email
+                })
+                form.errors.email_not_verified = false
+                form.success = response.data.message
+                form.errors.error = ''
+            } catch (error) {
+                form.errors.email_not_verified = true
+                form.errors.error = error.response.data.message
+                form.success = ''
+            }
+        }
+
         return {
             form,
-            login
+            login,
+            resendVerificationEmail
         }
     }
 }
