@@ -1,6 +1,5 @@
 # Pre-commit
 
 ddev pint
-ddev npm run format
-ddev npm run lint
+ddev npm run check
 ddev artisan test
