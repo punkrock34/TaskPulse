@@ -110,73 +110,203 @@ After installing the prerequisites and cloning the repository, follow these step
     cp .env.example .env
     ```
 
-2. **Start the ddev environment:**
+2. **Obtain Firebase credentials:**
+   - Go to the Firebase Console and navigate to your project.
+   - Download the `firebase_credentials.json` file.
+   - Place the `firebase_credentials.json` file in the `storage/app/firebase` directory of your project.
+
+3. **Add Firebase credentials to .env:**
+   - Open the `.env` file.
+   - Add the following environment variables, replacing the placeholders with the values from your Firebase project:
+
+     ```env
+     VITE_FIREBASE_API_KEY=<your-firebase-api-key>
+     VITE_FIREBASE_AUTH_DOMAIN=<your-firebase-auth-domain>
+     VITE_FIREBASE_PROJECT_ID=<your-firebase-project-id>
+     VITE_FIREBASE_STORAGE_BUCKET=<your-firebase-storage-bucket>
+     VITE_FIREBASE_MESSAGING_SENDER_ID=<your-firebase-messaging-sender-id>
+     VITE_FIREBASE_APP_ID=<your-firebase-app-id>
+     VITE_FIREBASE_MEASUREMENT_ID=<your-firebase-measurement-id>
+     ```
+
+4. **Add Reverb configuration to .env:**
+   - In the same `.env` file, add the following variables for Reverb:
+
+     ```env
+     REVERB_APP_ID=<reverb-app_id>
+     REVERB_APP_KEY=<reverb-app_key>
+     REVERB_APP_SECRET=<reverb-app_secret>
+     REVERB_HOST=localhost
+     REVERB_PORT=8080
+     REVERB_SCHEME=http
+     ```
+
+5. **(Optional) Configure Mail settings:**
+   - If you want to use Mailhog with `ddev`, add these variables to your `.env` file:
+
+     ```env
+     MAIL_MAILER="smtp"
+     MAIL_HOST="127.0.0.1"
+     MAIL_PORT="1025"
+     MAIL_USERNAME=null
+     MAIL_PASSWORD=null
+     MAIL_ENCRYPTION=null
+     MAIL_FROM_ADDRESS="hello@example.com"
+     MAIL_FROM_NAME="${APP_NAME}"
+     ```
+
+6. **Start the ddev environment:**
 
     ```sh
     ddev start
     ```
 
-3. **Install Composer dependencies:**
+7. **Install Composer dependencies:**
 
     ```sh
     ddev composer update
     ```
 
-4. **Generate application key:**
+8. **Generate application key:**
 
     ```sh
     ddev artisan key:generate
     ```
 
-5. **Configure Reverb and other settings:**
-Open the `.env` and replace `REVERB_APP_ID`, `REVERB_APP_KEY`, `REVERB_APP_SECRET` with your own credentials
+9. **Configure Reverb and other settings:**
+   - Open the `.env` file and replace where needed.
 
-6. **Run tests to verify setup:**
+10. **Run tests to verify setup:**
 
     ```sh
     ddev artisan test
     ```
 
-7. **Install NPM dependencies:**
+11. **Install NPM dependencies:**
 
     ```sh
-    ddev npm run install
+    ddev npm install
     ```
 
-8. **In a secondary terminal window run vite:**
+12. **In a secondary terminal window, run Vite:**
 
     ```sh
     ddev npm run dev
     ```
 
-9. **Launch the application:**
+13. **Launch the application:**
 
-   ```sh
-   ddev launch
-   ```
+    ```sh
+    ddev launch
+    ```
 
-This command will open the application in your default web browser. The URL should match the APP_URL in your .env file.
-10. **Database management (optional):**
+    This command will open the application in your default web browser. The URL should match the APP_URL in your `.env` file.
 
-To interact with the database, you can use:
+14. **Database management (optional):**
 
-```sh
-ddev mysql    
-```
+    To interact with the database, you can use:
 
-For a GUI interface, run:
+    ```sh
+    ddev mysql    
+    ```
 
-### HeidiSQL
 
-```sh
-ddev heidisql
-```
+## Database GUIs
 
-### phpmyadmin
+For managing your databases, you can use various GUI clients. Below are instructions for setting up **HeidiSQL** and **phpMyAdmin**.
 
-```sh
-ddev launch -p
-```
+### HeidiSQL (Windows only, can be used via WSL as well)
+
+HeidiSQL is a lightweight and easy-to-use database client for Windows, which can also be used with WSL2.
+
+1. **Install HeidiSQL:**
+    - Download the installation file by running the following command within your `ddev` environment:
+
+      ```sh
+      ddev heidisql
+      ```
+
+    - Alternatively, you can download it directly from the [official website](https://www.heidisql.com/download.php).
+
+2. **Launch HeidiSQL:**
+    - Once installed, you can connect to your database by entering the connection details provided by `ddev describe`. HeidiSQL will allow you to interact with your databases directly from a graphical interface.
+
+### phpMyAdmin
+
+`phpMyAdmin` is a widely-used web interface for managing MySQL and MariaDB databases.
+
+1. **Install ddev-phpmyadmin:**
+    - To add phpMyAdmin to your project, run the following command:
+
+      ```sh
+      ddev get ddev/ddev-phpmyadmin
+      ```
+
+2. **Restart ddev:**
+    - After installing phpMyAdmin, you need to restart `ddev` for the changes to take effect:
+
+      ```sh
+      ddev restart
+      ```
+
+3. **Launch phpMyAdmin:**
+    - Access phpMyAdmin through your browser with the following command:
+
+      ```sh
+      ddev phpmyadmin
+      ```
+
+    - This will open phpMyAdmin where you can manage your databases using a web interface.
+
+### Other GUI Clients
+
+If you prefer other GUI database clients, here are some alternatives:
+
+- **Sequel Ace** (macOS): Launch it with `ddev sequelace` (must be installed).
+- **TablePlus** (macOS): Launch it with `ddev tableplus` (must be installed).
+- **Querious** (macOS): Launch it with `ddev querious` (must be installed).
+- **DBeaver** (WSL2, Linux, macOS): Launch it with `ddev dbeaver` (must be installed).
+- **PhpStorm**: PhpStorm and other JetBrains tools have a built-in database browser. If you're using the DDEV Integration plugin, this setup is automatic.
+
+### Custom Database Ports
+
+For projects where you want to use a static host database port, you can set this in your `ddev` configuration:
+
+1. **Set a static port:**
+   - In your `ddev` configuration, add the following line under the `database` service:
+
+     ```sh
+     host_db_port: 59002
+     ```
+
+     Replace `59002` with any port number of your choice, ensuring it doesn't conflict with other services.
+
+2. **Apply the changes:**
+   - Run `ddev start` to apply the changes and make the port available.
+
+### MySQL Workbench
+
+There is a sample custom command in `ddev` that allows you to run MySQL Workbench:
+
+1. **Set up MySQL Workbench:**
+   - Copy the sample command:
+
+     ```sh
+     cp ~/.ddev/commands/host/mysqlworkbench.example ~/.ddev/commands/host/mysqlworkbench
+     ```
+
+2. **Launch MySQL Workbench:**
+   - Run the command:
+
+     ```sh
+     ddev mysqlworkbench
+     ```
+
+   - This will open MySQL Workbench if it’s installed on your system.
+
+3. Continue with the remaining steps in the installation guide.
+
+Please note that these updated steps are applicable starting from 2024. Make sure to follow these instructions to ensure a smooth installation process.
 
 After completing these steps, your TaskPulse environment should be ready for development. The `ddev launch` command will open the application in your default web browser.
 

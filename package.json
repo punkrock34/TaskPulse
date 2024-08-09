@@ -5,6 +5,7 @@
         "dev": "vite",
         "format": "prettier --write 'resources/js/**/*.{js,vue}'",
         "lint": "eslint 'resources/js/**/*.{js,vue}' --fix",
+        "check": "npm run lint && npm run format",
         "build": "vite build",
         "prepare": "husky"
     },

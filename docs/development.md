@@ -70,22 +70,33 @@ Ensure you've completed all steps in the [Installation Guide](installation.md) b
 
 ### PHP XDebug
 
-1. **Enable XDebug**
+1. **Enable XDebug:**
 
     ```sh
     ddev xdebug on
     ```
 
-2. **Configure your IDE to listen for PHP Debug connections.**
-   (Repository has .vscode configured for port 9003 check .vscode/launch.json)
+2. **Configure your IDE to listen for PHP Debug connections:**
+   - The repository has `.vscode` configured for port 9003. You can check the configuration in `.vscode/launch.json`.
 
-3. **Set breakpoints in your code.**
+3. **Automatically Start XDebug in VSCode:**
+   - A `tasks.json` file has been added to the `.vscode` folder that can start XDebug automatically. Ensure your VSCode is configured to use these tasks.
 
-4. **Start debugging in your IDE.**
+4. **Set breakpoints in your code.**
 
-5. **When finished, disable XDebug:**
+5. **Start debugging in your IDE.**
+
+6. **When finished, disable XDebug:**
 
     ```sh
+    ddev xdebug off
+    ```
+
+7. **Manual XDebug Activation (Optional):**
+   - Even though XDebug can be started automatically using the provided `tasks.json`, you may still need to manually start it in certain situations. To manually start or stop XDebug, you can use the following commands:
+
+    ```sh
+    ddev xdebug on
     ddev xdebug off
     ```
 
@@ -93,8 +104,40 @@ Ensure you've completed all steps in the [Installation Guide](installation.md) b
 
 We use Laravel Pint for PHP code styling. To run Pint:
 
-```sh
+```
 ddev pint
+```
+
+For JavaScript and Vue.js files, we use Prettier and ESLint. The `ddev npm run check` command will handle both linting and formatting:
+
+```
+ddev npm run check
+```
+
+This command runs the following:
+
+- **Lint:** Ensures JavaScript and Vue.js files follow the ESLint rules:
+  
+  ```sh
+  ddev npm run lint
+  ```
+
+- **Format:** Formats the JavaScript and Vue.js files using Prettier:
+  
+  ```sh
+  ddev npm run format
+  ```
+
+Here’s what `ddev npm run check` does internally:
+
+```json
+{
+    "scripts": {
+        "format": "prettier --write 'resources/js/**/*.{js,vue}'",
+        "lint": "eslint 'resources/js/**/*.{js,vue}' --fix",
+        "check": "npm run lint && npm run format"
+    }
+}
 ```
 
 ## Database Management
