@@ -22,7 +22,10 @@ use Kreait\Firebase\Exception\FirebaseException;
 
 class LoginService
 {
-    public function __construct(protected FirebaseAuth $auth, protected UserService $userService) {}
+    public function __construct(
+        protected FirebaseAuth $auth, 
+        protected UserService $userService
+    ) {}
 
     /**
      * Login Handler for Firebase
@@ -96,6 +99,7 @@ class LoginService
      *
      * @return UserRecord
      *
+     * @throws InvalidCredentialsException
      * @throws UserNotFoundException
      * @throws AuthServiceException
      * @throws GeneralFirebaseException
