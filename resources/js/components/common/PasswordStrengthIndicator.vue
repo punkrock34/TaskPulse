@@ -7,7 +7,11 @@
                 class="h-full rounded-full transition-all duration-300"
             ></div>
         </div>
-        <p v-if="passwordStrengthMessage" class="text-xs text-gray-600 dark:text-gray-400 mt-1">
+        <p
+            v-if="passwordStrengthMessage"
+            :class="passwordStrengthClass + '-text'"
+            class="text-xs mt-1"
+        >
             {{ passwordStrengthMessage }}
         </p>
     </div>
@@ -61,3 +65,17 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.bg-red-500-text {
+    color: #ef4444;
+}
+
+.bg-yellow-500-text {
+    color: #f59e0b;
+}
+
+.bg-green-500-text {
+    color: #10b981;
+}
+</style>

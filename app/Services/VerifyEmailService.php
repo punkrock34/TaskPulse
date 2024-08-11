@@ -6,7 +6,6 @@ use App\Exceptions\FailedToSendVerificationEmailException;
 use App\Mail\Auth\VerifyEmailMail;
 use App\Services\Firebase\FirebaseTokenService;
 use App\Services\Firebase\FirebaseUserService;
-use Illuminate\Mail\SentMessage;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Kreait\Firebase\Auth\UserRecord;
@@ -71,11 +70,13 @@ class VerifyEmailService
      */
     public function sendMail(UserRecord $user, UnencryptedToken $customToken)
     {
-        try{
+        try {
             Mail::to($user->email)->send(new VerifyEmailMail($customToken->toString(), $user->displayName));
+
             return true;
         } catch (\Exception $e) {
-            Log::error("Failed to send verification email to: {$user->email}. Error: " . $e->getMessage());
+            Log::error("Failed to send verification email to: {$user->email}. Error: ".$e->getMessage());
+
             return false;
         }
     }

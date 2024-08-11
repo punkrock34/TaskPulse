@@ -127,6 +127,16 @@ class FirebaseUserService
     }
 
     /**
+     * Update the user's password.
+     *
+     * @return void
+     */
+    public function updateUserPassword(string $uid, string $password)
+    {
+        $this->auth->updateUser($uid, ['password' => $password]);
+    }
+
+    /**
      * Prepare the user properties for creating a new user.
      *
      * @return array

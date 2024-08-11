@@ -1,11 +1,6 @@
 <template>
-    <button class="theme-toggle" @click="toggleTheme">
-        <span v-if="isDark" class="dark-mode">
-            <i class="fas fa-sun"></i>
-        </span>
-        <span v-else class="light-mode">
-            <i class="fas fa-moon"></i>
-        </span>
+    <button class="btn btn-square btn-ghost text-lg" @click="toggleTheme">
+        <i :class="isDark ? 'fas fa-sun' : 'fas fa-moon'"></i>
     </button>
 </template>
 
@@ -18,12 +13,10 @@ export default {
         }
     },
     mounted() {
-        // Check the user's theme preference from local storage
         const storedTheme = localStorage.getItem('theme')
         if (storedTheme) {
             this.isDark = storedTheme === 'dark'
         } else {
-            // Fallback to browser preference if no local storage value is found
             this.isDark =
                 window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
         }
@@ -45,18 +38,3 @@ export default {
     }
 }
 </script>
-
-<style scoped>
-.theme-toggle {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 1.5rem;
-}
-.dark-mode {
-    color: #f39c12;
-}
-.light-mode {
-    color: #2c3e50;
-}
-</style>

@@ -41,10 +41,7 @@ export default {
 
         const forgotPassword = () => {
             form.post(route('forgot-password.store'), {
-                preserveScroll: true,
-                onSuccess: (response) => {
-                    form.success = response.props.success
-                }
+                preserveScroll: true
             })
         }
 

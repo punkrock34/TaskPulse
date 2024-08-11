@@ -1,5 +1,6 @@
 <template>
     <DefaultLayout>
+        <SnackbarNotification ref="snackbarNotification" />
         <div class="flex flex-grow items-center justify-center w-full">
             <div
                 class="w-full max-w-xl p-6 sm:p-8 bg-white dark:bg-gray-800 rounded-lg shadow-md theme-transition"
@@ -45,24 +46,27 @@ import LoginForm from '@/components/forms/LoginForm.vue'
 import ButtonWithIcon from '@/components/buttons/ButtonWithIcon.vue'
 import { auth, provider, signInWithPopup } from '@/firebase'
 import axios from 'axios'
+import SnackbarNotification from '@/components/ui/SnackbarNotification.vue'
 
 export default {
     name: 'LoginPage',
     components: {
         DefaultLayout,
         LoginForm,
-        ButtonWithIcon
+        ButtonWithIcon,
+        SnackbarNotification
     },
     methods: {
         async signInWithGoogle() {
-            console.log('Signing in with Google...')
             try {
                 const result = await signInWithPopup(auth, provider)
                 const idToken = await result.user.getIdToken()
                 await axios.post(route('login.google.store'), { idToken: idToken })
                 window.location.href = route('dashboard.index')
             } catch (error) {
-                console.error('Google sign-in error', error)
+                this.$refs.snackbarNotification.show(
+                    'Failed to sign in with Google. Please try again.'
+                )
             }
         },
         route

@@ -1,6 +1,4 @@
 import '@fortawesome/fontawesome-free/css/all.min.css'
-import './bootstrap'
-import 'flowbite'
 import axios from 'axios'
 
 import { createApp, h } from 'vue'

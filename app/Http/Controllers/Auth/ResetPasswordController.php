@@ -3,32 +3,37 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\ResetPasswordRequest;
+use App\Services\ResetPasswordService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use Kreait\Firebase\Auth as FirebaseAuth;
 
 class ResetPasswordController extends Controller
 {
-    public function __construct(protected FirebaseAuth $auth) {}
+    public function __construct(
+        protected ResetPasswordService $resetPasswordService,
+    ) {}
 
     public function index(Request $request)
     {
-        return Inertia::render('ResetPassword')->withToken($request->token);
+        if (! $request->has('token')) {
+            return redirect()->route('forgot-password.index')->withErrors(['error' => 'Invalid or expired reset password link']);
+        }
+
+        return Inertia::render('ResetPassword');
     }
 
-    public function resetPassword(Request $request)
+    public function store(ResetPasswordRequest $request)
     {
-        $email = $request->input('email');
-        $password = $request->input('password');
-        $code = $request->input('code');
-
         try {
-            $this->auth->verifyPasswordResetCode($code);
-            $this->auth->changeUserPassword($email, $password);
+            $token = $request->input('token');
+            $password = $request->input('password');
 
-            return response()->json(['message' => 'Password reset successfully']);
+            $this->resetPasswordService->resetPassword($token, $password);
+
+            return Inertia::render('ResetPassword', ['success' => 'Password reset successfully']);
         } catch (\Exception $e) {
-            return Inertia::render('Login', ['error' => $e->getMessage()]);
+            return Inertia::render('Login', ['errors' => [$e->getCode() => $e->getMessage()]]);
         }
     }
 }
