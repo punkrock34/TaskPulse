@@ -21,7 +21,7 @@
                 <i :class="visible ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
             </button>
         </div>
-        <SpanError :error="error" />
+        <SpanError :error="error" class="mb-1" />
     </div>
 </template>
 

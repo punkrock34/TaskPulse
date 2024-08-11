@@ -14,7 +14,7 @@
                 {{ label }}
             </label>
         </div>
-        <SpanError :error="error" />
+        <SpanError :error="error" class="mb-1" />
     </div>
 </template>
 

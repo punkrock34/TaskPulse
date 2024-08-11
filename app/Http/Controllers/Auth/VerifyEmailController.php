@@ -10,7 +10,9 @@ use Inertia\Inertia;
 
 class VerifyEmailController extends Controller
 {
-    public function __construct(protected VerifyEmailService $verifyEmailService) {}
+    public function __construct(
+        protected VerifyEmailService $verifyEmailService
+    ) {}
 
     public function index(VerifyEmailRequest $request)
     {

@@ -2,80 +2,52 @@
 
 namespace App\Services;
 
-use App\Exceptions\AuthServiceException;
 use App\Exceptions\EmailNotVerifiedException;
-use App\Exceptions\GeneralFirebaseException;
-use App\Exceptions\InvalidCredentialsException;
-use App\Exceptions\TokenVerificationException;
-use App\Exceptions\UnexpectedErrorException;
-use App\Exceptions\UserNotFoundException;
 use App\Models\User;
+use App\Services\Firebase\FirebaseTokenService;
+use App\Services\Firebase\FirebaseUserService;
 use Illuminate\Support\Facades\Log;
-use Kreait\Firebase\Auth as FirebaseAuth;
-use Kreait\Firebase\Auth\SignIn\FailedToSignIn;
 use Kreait\Firebase\Auth\UserRecord;
-use Kreait\Firebase\Exception\Auth\FailedToVerifyToken;
-use Kreait\Firebase\Exception\Auth\RevokedIdToken;
-use Kreait\Firebase\Exception\Auth\UserNotFound;
-use Kreait\Firebase\Exception\AuthException;
-use Kreait\Firebase\Exception\FirebaseException;
 
 class LoginService
 {
-    public function __construct(protected FirebaseAuth $auth, protected UserService $userService) {}
+    public function __construct(
+        protected FirebaseTokenService $firebaseTokenService,
+        protected FirebaseUserService $firebaseUserService,
+        protected UserService $userService
+    ) {}
 
     /**
      * Login Handler for Firebase
      *
      * @return User
      *
-     * @throws InvalidCredentialsException
      * @throws EmailNotVerifiedException
-     * @throws UnexpectedErrorException
-     * @throws UserNotFoundException
-     * @throws AuthServiceException
-     * @throws GeneralFirebaseException
      */
     public function login(string $email, string $password, bool $remember)
     {
-        try {
-            $firebaseUser = $this->signInWithFirebase($email, $password);
+        $signInResult = $this->firebaseUserService->signInWithFirebaseEmailAndPasswordProvider($email, $password);
+        $firebaseUser = $this->firebaseUserService->getUserByUID($signInResult->firebaseUserId());
 
-            if (! $firebaseUser->emailVerified) {
-                throw new EmailNotVerifiedException;
-            }
-
-            return $this->authenticateUser($firebaseUser, $remember);
-        } catch (InvalidCredentialsException|EmailNotVerifiedException|UserNotFoundException $e) {
-            Log::error("Firebase error during sign in: {$e->getMessage()}");
-            throw $e;
-        } catch (\Exception $e) {
-            Log::error("Unexpected error during sign in: {$e->getMessage()}");
-            throw new UnexpectedErrorException;
+        if (! $firebaseUser->emailVerified) {
+            Log::warning("User tried to login with unverified email: {$email}");
+            throw new EmailNotVerifiedException;
         }
+
+        return $this->authenticateUser($firebaseUser, $remember);
     }
 
     /**
      * Login With Google Handler for Firebase
      *
      * @return User
-     *
-     * @throws UnexpectedErrorException
      */
     public function loginWithGoogle(string $idToken)
     {
-        try {
-            $verifiedIdToken = $this->auth->verifyIdToken($idToken, false, 300);
-            $firebaseUser = $this->auth->getUser($verifiedIdToken->claims()->get('sub'));
+        $uid = $this->firebaseTokenService->getUidFromIdToken($idToken);
+        $firebaseUser = $this->firebaseUserService->getUserByUID($uid);
 
-            return $this->authenticateUser($firebaseUser, true);
-        } catch (FailedToVerifyToken|RevokedIdToken $e) {
-            Log::error("Token verification failed: {$e->getMessage()}");
-            throw new TokenVerificationException;
-        } catch (\Exception $e) {
-            Log::error("Failed to login with Google: {$e->getMessage()}");
-            throw new UnexpectedErrorException('Failed to login with Google. Please try again.');
-        }
+        return $this->authenticateUser($firebaseUser, true);
     }
 
     /**
@@ -89,31 +61,5 @@ class LoginService
         $this->userService->loginUser($user->id, $remember);
 
         return $user;
-    }
-
-    /**
-     * Sign In with Firebase using email and password
-     *
-     * @return UserRecord
-     *
-     * @throws UserNotFoundException
-     * @throws AuthServiceException
-     * @throws GeneralFirebaseException
-     */
-    private function signInWithFirebase(string $email, string $password)
-    {
-        try {
-            $signInResult = $this->auth->signInWithEmailAndPassword($email, $password);
-
-            return $this->auth->getUser($signInResult->firebaseUserId());
-        } catch (FailedToSignIn $e) {
-            throw new InvalidCredentialsException;
-        } catch (UserNotFound $e) {
-            throw new UserNotFoundException;
-        } catch (AuthException $e) {
-            throw new AuthServiceException;
-        } catch (FirebaseException $e) {
-            throw new GeneralFirebaseException;
-        }
     }
 }

@@ -9,6 +9,16 @@ use Kreait\Firebase\Auth\UserRecord;
 class UserService
 {
     /**
+     * Log in the user
+     *
+     * @return void
+     */
+    public function loginUser(string $userId, bool $remember)
+    {
+        Auth::loginUsingId($userId, $remember);
+    }
+
+    /**
      * Update or create user in the database
      *
      * @return User
@@ -57,15 +67,5 @@ class UserService
         ]);
 
         return $user;
-    }
-
-    /**
-     * Log in the user
-     *
-     * @return void
-     */
-    public function loginUser(string $userId, bool $remember)
-    {
-        Auth::loginUsingId($userId, $remember);
     }
 }

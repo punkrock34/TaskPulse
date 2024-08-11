@@ -9,7 +9,9 @@ use Inertia\Inertia;
 
 class RegisterController extends Controller
 {
-    public function __construct(protected RegisterService $registerService) {}
+    public function __construct(
+        protected RegisterService $registerService
+    ) {}
 
     public function index()
     {

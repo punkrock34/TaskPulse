@@ -8,7 +8,9 @@ use App\Services\LoginService;
 
 class GoogleLoginController extends Controller
 {
-    public function __construct(protected LoginService $loginService) {}
+    public function __construct(
+        protected LoginService $loginService
+    ) {}
 
     public function store(GoogleLoginRequest $request)
     {

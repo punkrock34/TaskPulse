@@ -22,7 +22,7 @@
                     type="button"
                     @click="signInWithGoogle"
                 />
-                <div class="mt-4 text-sm font-medium text-gray-500 dark:text-gray-300 text-center">
+                <div class="mt-4 text-md font-medium text-gray-500 dark:text-gray-300 text-center">
                     Already have an account?
                     <a
                         :href="route('login.index')"
