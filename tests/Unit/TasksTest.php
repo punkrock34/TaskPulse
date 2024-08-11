@@ -2,8 +2,8 @@
 
 namespace Tests\Unit;
 
-use PHPUnit\Framework\TestCase;
 use DateTime;
+use PHPUnit\Framework\TestCase;
 
 enum TaskStatus: string
 {
@@ -20,27 +20,32 @@ interface RepositoryInterface
 class FakeTask
 {
     public $id;
+
     public $title;
+
     public $description;
+
     public $status;
+
     public $created_at;
+
     public $updated_at;
+
     public $user_id;
 
     public function __construct(
-        $id = null, 
-        $title = null, 
-        $description = null, 
+        $id = null,
+        $title = null,
+        $description = null,
         $status = null,
         $user_id = null
-    )
-    {
+    ) {
         $this->id = $id ?? rand(1, 1000);
-        $this->title = $title ?? "Fake Task " . $this->id;
-        $this->description = $description ?? "Description for fake task " . $this->id;
+        $this->title = $title ?? 'Fake Task '.$this->id;
+        $this->description = $description ?? 'Description for fake task '.$this->id;
         $this->status = $status ?? TaskStatus::TODO->value;
-        $this->created_at = new DateTime();
-        $this->updated_at = new DateTime();
+        $this->created_at = new DateTime;
+        $this->updated_at = new DateTime;
         $this->user_id = $user_id ?? 1;
     }
 
@@ -86,7 +91,8 @@ class FakeTaskService
     }
 }
 
-function fakeTasks($taskNumber) {
+function fakeTasks($taskNumber)
+{
     $tasks = [];
 
     if ($taskNumber <= 0) {
@@ -94,15 +100,16 @@ function fakeTasks($taskNumber) {
     }
 
     for ($i = 0; $i < $taskNumber; $i++) {
-        $tasks[] = new FakeTask();
+        $tasks[] = new FakeTask;
     }
-    
+
     return $tasks;
 }
 
 function fakeTaskService($tasksNumber = 0)
 {
     $tasks = fakeTasks($tasksNumber);
+
     return new FakeTaskService(new FakeTaskRepository($tasks));
 }
 
@@ -127,7 +134,7 @@ class TasksTest extends TestCase
         $this->assertCount(1, $tasks);
     }
 
-    public function test_get_all_returns_multiple_tasks_when_multiple_tasks_exists(): void 
+    public function test_get_all_returns_multiple_tasks_when_multiple_tasks_exists(): void
     {
         $taskService = fakeTaskService(5);
         $tasks = $taskService->getAllTasks();

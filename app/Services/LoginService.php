@@ -23,7 +23,7 @@ use Kreait\Firebase\Exception\FirebaseException;
 class LoginService
 {
     public function __construct(
-        protected FirebaseAuth $auth, 
+        protected FirebaseAuth $auth,
         protected UserService $userService
     ) {}
 

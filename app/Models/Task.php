@@ -12,9 +12,9 @@ class Task extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [
-        'title', 
+        'title',
         'description',
-        'status'
+        'status',
     ];
 
     public function user()
