@@ -2,7 +2,6 @@
 
 namespace App\Services\Firebase;
 
-use App\Exceptions\AuthServiceException;
 use App\Exceptions\FailedToSignInWithTokenException;
 use App\Exceptions\GeneralFirebaseException;
 use App\Exceptions\TokenVerificationException;
@@ -28,10 +27,10 @@ class FirebaseTokenService
      * @throws TooManyAttemptsException
      * @throws GeneralFirebaseException
      */
-    public function getCustomToken(string $uid)
+    public function getCustomToken(string $uid, array $claims = [], int $expiresIn = 3600)
     {
         try {
-            return $this->auth->createCustomToken($uid);
+            return $this->auth->createCustomToken($uid, $claims, $expiresIn);
         } catch (FirebaseException|AuthException $e) {
             Log::error("Firebase error while creating custom token: {$e->getMessage()}");
             if ($e->getMessage() == 'TOO_MANY_ATTEMPTS_TRY_LATER') {
@@ -73,21 +72,15 @@ class FirebaseTokenService
     }
 
     /**
-     * Create custom password reset token.
+     * Has reset password claim.
      *
-     * @return string
+     * @return bool
      */
-    public function createCustomPasswordResetToken(string $uid)
+    public function hasResetPasswordClaim(string $idToken)
     {
-        try {
-            $expireTime = now()->addMinutes(5)->getTimestamp();
+        $claims = $this->verifyIdToken($idToken)->claims();
 
-            return $this->auth->createCustomToken($uid, ['password_reset' => true], $expireTime)->toString();
-        } catch (AuthException $e) {
-            throw new AuthServiceException;
-        } catch (FirebaseException $e) {
-            throw new GeneralFirebaseException;
-        }
+        return $claims->get('reset_password') === true;
     }
 
     /**

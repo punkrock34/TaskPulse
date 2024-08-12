@@ -13,6 +13,7 @@
     </DefaultLayout>
 </template>
 <script>
+import { route } from 'ziggy-js'
 import DefaultLayout from '@/components/layouts/DefaultLayout.vue'
 import ResetPasswordForm from '@/components/forms/ResetPasswordForm.vue'
 
@@ -21,6 +22,9 @@ export default {
     components: {
         DefaultLayout,
         ResetPasswordForm
+    },
+    methods: {
+        route
     }
 }
 </script>

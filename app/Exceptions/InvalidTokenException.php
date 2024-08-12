@@ -4,7 +4,7 @@ namespace App\Exceptions;
 
 use Exception;
 
-class FailedToSignInWithTokenException extends Exception
+class InvalidTokenException extends Exception
 {
     protected $message = 'The link you used is either invalid or has expired. Please request a new link and try again.';
 

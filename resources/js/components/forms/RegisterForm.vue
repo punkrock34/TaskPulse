@@ -1,11 +1,12 @@
 <template>
     <div>
-        <SpanError :error="form.errors.error" />
+        <SpanError :error="form.errors.error" class="mb-1" />
         <SpanWithActionLink
             v-show="form.errors.email_already_in_use"
+            class="mb-1"
             :pre-action-text="'The email address is already in use. Please try logging in instead or'"
             :action-text="'Reset your password'"
-            :action-link="resetPassword"
+            :action-link="forgotPassword"
         />
         <form class="space-y-4" @submit.prevent="register">
             <TextInput
@@ -50,7 +51,7 @@
                 :has-error="form.errors.terms"
                 :error="form.errors.terms"
             />
-            <NormalButton type="submit" label="Sign up" />
+            <NormalButton type="submit" label="Sign up" :loading="loading" />
         </form>
     </div>
 </template>
@@ -66,6 +67,7 @@ import SpanError from '@/components/common/SpanError.vue'
 import SpanWithActionLink from '@/components/common/SpanWithActionLink.vue'
 import PasswordStrengthIndicator from '@/components/common/PasswordStrengthIndicator.vue'
 import axios from 'axios'
+import { ref } from 'vue'
 
 export default {
     name: 'RegisterForm',
@@ -87,7 +89,10 @@ export default {
             terms: false
         })
 
+        const loading = ref(false)
+
         const register = () => {
+            loading.value = true
             form.post(route('register.store'), {
                 preserveScroll: true,
                 onError: (errors) => {
@@ -95,13 +100,14 @@ export default {
                     if (errors.email_already_in_use) {
                         form.errors.email_already_in_use = true
                     }
-                }
+                },
+                onFinish: () => (loading.value = false)
             })
         }
 
-        const resetPassword = async () => {
+        const forgotPassword = async () => {
             try {
-                await axios.post(route('password.email'), {
+                await axios.post(route('forgot-password.store'), {
                     email: form.email
                 })
                 form.success = 'A password reset link has been sent to your email address.'
@@ -113,7 +119,8 @@ export default {
         return {
             form,
             register,
-            resetPassword
+            forgotPassword,
+            loading
         }
     }
 }

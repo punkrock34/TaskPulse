@@ -18,6 +18,8 @@
 </template>
 
 <script>
+import { ref, watch } from 'vue'
+
 export default {
     name: 'PasswordStrengthIndicator',
     props: {
@@ -26,41 +28,42 @@ export default {
             required: true
         }
     },
-    data() {
-        return {
-            passwordStrength: 0,
-            passwordStrengthClass: 'bg-red-500',
-            passwordStrengthMessage: 'Weak'
-        }
-    },
-    watch: {
-        password(newPassword) {
-            this.checkPasswordStrength(newPassword)
-        }
-    },
-    methods: {
-        checkPasswordStrength(password) {
+    setup(props) {
+        const passwordStrength = ref(0)
+        const passwordStrengthClass = ref('bg-red-500')
+        const passwordStrengthMessage = ref('Weak')
+
+        const updateStrength = () => {
             let strength = 0
+            const password = props.password
 
             if (password.length >= 8) strength += 1
             if (password.length >= 12) strength += 1
-            if (password.match(/[A-Z]/)) strength += 1
-            if (password.match(/[a-z]/)) strength += 1
-            if (password.match(/[0-9]/)) strength += 1
-            if (password.match(/[^a-zA-Z0-9]/)) strength += 1
+            if (/[A-Z]/.test(password)) strength += 1
+            if (/[a-z]/.test(password)) strength += 1
+            if (/[0-9]/.test(password)) strength += 1
+            if (/[^a-zA-Z0-9]/.test(password)) strength += 1
 
-            this.passwordStrength = (strength / 6) * 100
+            passwordStrength.value = (strength / 6) * 100
 
             if (strength <= 2) {
-                this.passwordStrengthClass = 'bg-red-500'
-                this.passwordStrengthMessage = 'Weak'
+                passwordStrengthClass.value = 'bg-red-500'
+                passwordStrengthMessage.value = 'Weak'
             } else if (strength <= 4) {
-                this.passwordStrengthClass = 'bg-yellow-500'
-                this.passwordStrengthMessage = 'Moderate'
+                passwordStrengthClass.value = 'bg-yellow-500'
+                passwordStrengthMessage.value = 'Moderate'
             } else {
-                this.passwordStrengthClass = 'bg-green-500'
-                this.passwordStrengthMessage = 'Strong'
+                passwordStrengthClass.value = 'bg-green-500'
+                passwordStrengthMessage.value = 'Strong'
             }
+        }
+
+        watch(() => props.password, updateStrength, { immediate: true })
+
+        return {
+            passwordStrength,
+            passwordStrengthClass,
+            passwordStrengthMessage
         }
     }
 }

@@ -1,6 +1,13 @@
 <template>
-    <SpanError :has-error="form.errors.error" :error="form.errors.error" />
-    <SpanSuccess :has-success="form.success" :success="form.success" />
+    <SpanError :has-error="form.errors.error" :error="form.errors.error" class="mb-1" />
+    <SpanWithActionLink
+        v-show="form.success"
+        class="mb-1"
+        :pre-action-text="'Password reset successfully. You can now'"
+        :action-text="'Sign in'"
+        :action-link="loginRoute"
+        :is-success="true"
+    />
 
     <form class="space-y-4" @submit.prevent="resetPassword">
         <PasswordInput
@@ -20,7 +27,7 @@
             :error="form.errors.password_confirmation"
         />
         <PasswordStrengthIndicator :password="form.password" />
-        <NormalButton type="submit" label="Reset Password" />
+        <NormalButton type="submit" label="Reset Password" :loading="loading" />
     </form>
 </template>
 
@@ -29,9 +36,10 @@ import { route } from 'ziggy-js'
 import { useForm } from '@inertiajs/vue3'
 import PasswordInput from '@/components/inputs/PasswordInput.vue'
 import SpanError from '@/components/common/SpanError.vue'
-import SpanSuccess from '@/components/common/SpanSuccess.vue'
+import SpanWithActionLink from '@/components/common/SpanWithActionLink.vue'
 import PasswordStrengthIndicator from '@/components/common/PasswordStrengthIndicator.vue'
 import NormalButton from '@/components/buttons/NormalButton.vue'
+import { ref } from 'vue'
 
 export default {
     name: 'ResetPasswordForm',
@@ -39,7 +47,7 @@ export default {
         PasswordInput,
         NormalButton,
         SpanError,
-        SpanSuccess,
+        SpanWithActionLink,
         PasswordStrengthIndicator
     },
     setup() {
@@ -48,15 +56,34 @@ export default {
             password_confirmation: ''
         })
 
+        const loading = ref(false)
+        const loginRoute = () => {
+            window.location.href = route('login.index')
+        }
+
         const resetPassword = () => {
+            loading.value = true
             form.post(route('reset-password.store', { token: route().params.token }), {
-                preserveScroll: true
+                preserveScroll: true,
+                onSuccess: (response) => {
+                    form.success = response.props.success
+                    form.reset()
+                },
+                onError: (errors) => {
+                    form.errors.error = errors.error
+                    if (errors.email_not_verified) {
+                        form.errors.email_not_verified = true
+                    }
+                },
+                onFinish: () => (loading.value = false)
             })
         }
 
         return {
             form,
-            resetPassword
+            resetPassword,
+            loading,
+            loginRoute
         }
     }
 }

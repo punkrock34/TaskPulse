@@ -33,7 +33,7 @@ class ResetPasswordController extends Controller
 
             return Inertia::render('ResetPassword', ['success' => 'Password reset successfully']);
         } catch (\Exception $e) {
-            return Inertia::render('Login', ['errors' => [$e->getCode() => $e->getMessage()]]);
+            return Inertia::render('ResetPassword', ['errors' => [$e->getCode() => $e->getMessage()]]);
         }
     }
 }

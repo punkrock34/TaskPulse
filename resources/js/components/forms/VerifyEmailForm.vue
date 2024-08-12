@@ -1,7 +1,9 @@
 <template>
     <div>
-        <SpanError :has-error="errors.error" :error="errors.error" />
+        <SpanError :has-error="errors.error" :error="errors.error" class="mb-1" />
         <SpanWithActionLink
+            v-show="errors.resend_verification"
+            class="mb-1"
             :has-action-link="errors.resend_verification"
             :pre-action-text="'Please verify your email address. If you did not receive the email, you can'"
             :action-text="'Resend verification email'"

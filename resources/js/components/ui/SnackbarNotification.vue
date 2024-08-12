@@ -25,12 +25,12 @@ export default {
             timeout: null
         }
     },
+    beforeUnmount() {
+        this.clearAutoHide()
+    },
     methods: {
         show(message, duration = 5000) {
-            if (this.visible) {
-                this.hide()
-                clearTimeout(this.timeout)
-            }
+            this.clearAutoHide()
             this.message = message
             this.visible = true
             this.autoHide(duration)
@@ -39,17 +39,24 @@ export default {
             this.visible = false
         },
         autoHide(duration = 5000) {
-            clearTimeout(this.timeout)
-            this.timeout = setTimeout(this.hide, duration)
+            this.clearAutoHide()
+            this.timeout = setTimeout(() => {
+                this.hide()
+                this.message = ''
+            }, duration)
         },
         clearAutoHide() {
-            clearTimeout(this.timeout)
+            if (this.timeout) {
+                clearTimeout(this.timeout)
+                this.timeout = null
+            }
         }
     }
 }
 </script>
 
 <style scoped>
+/* Your existing styles */
 .toast {
     position: fixed;
     bottom: 1rem;

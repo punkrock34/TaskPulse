@@ -34,7 +34,7 @@ class ForgotPasswordService
             return;
         }
 
-        $customToken = $this->firebaseTokenService->getCustomToken($user->uid);
+        $customToken = $this->firebaseTokenService->getCustomToken($user->uid, ['reset_password' => true], 300);
 
         if (! $this->sendMail($user, $customToken)) {
             throw new FailedToSendPasswordForgotEmailException;
