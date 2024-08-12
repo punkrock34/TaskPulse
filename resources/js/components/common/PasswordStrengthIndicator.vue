@@ -1,16 +1,16 @@
 <template>
-    <div class="relative">
-        <div class="h-2 w-full bg-gray-300 rounded-full mt-1">
+    <div class="relative mt-2">
+        <div class="h-3 w-full bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
             <div
                 :class="passwordStrengthClass"
                 :style="{ width: passwordStrength + '%' }"
-                class="h-full rounded-full transition-all duration-300"
+                class="h-full transition-all duration-300"
             ></div>
         </div>
         <p
             v-if="passwordStrengthMessage"
-            :class="passwordStrengthClass + '-text'"
-            class="text-xs mt-1"
+            :class="passwordStrengthMessageClass"
+            class="text-sm mt-2 font-medium text-left"
         >
             {{ passwordStrengthMessage }}
         </p>
@@ -32,6 +32,7 @@ export default {
         const passwordStrength = ref(0)
         const passwordStrengthClass = ref('bg-red-500')
         const passwordStrengthMessage = ref('Weak')
+        const passwordStrengthMessageClass = ref('text-red-500')
 
         const updateStrength = () => {
             let strength = 0
@@ -49,12 +50,15 @@ export default {
             if (strength <= 2) {
                 passwordStrengthClass.value = 'bg-red-500'
                 passwordStrengthMessage.value = 'Weak'
+                passwordStrengthMessageClass.value = 'text-red-500'
             } else if (strength <= 4) {
                 passwordStrengthClass.value = 'bg-yellow-500'
                 passwordStrengthMessage.value = 'Moderate'
+                passwordStrengthMessageClass.value = 'text-yellow-500'
             } else {
                 passwordStrengthClass.value = 'bg-green-500'
                 passwordStrengthMessage.value = 'Strong'
+                passwordStrengthMessageClass.value = 'text-green-500'
             }
         }
 
@@ -63,22 +67,30 @@ export default {
         return {
             passwordStrength,
             passwordStrengthClass,
-            passwordStrengthMessage
+            passwordStrengthMessage,
+            passwordStrengthMessageClass
         }
     }
 }
 </script>
 
 <style scoped>
-.bg-red-500-text {
+.bg-red-500 {
+    background-color: #ef4444;
+}
+.bg-yellow-500 {
+    background-color: #f59e0b;
+}
+.bg-green-500 {
+    background-color: #10b981;
+}
+.text-red-500 {
     color: #ef4444;
 }
-
-.bg-yellow-500-text {
+.text-yellow-500 {
     color: #f59e0b;
 }
-
-.bg-green-500-text {
+.text-green-500 {
     color: #10b981;
 }
 </style>

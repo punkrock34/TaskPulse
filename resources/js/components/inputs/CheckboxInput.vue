@@ -1,19 +1,17 @@
 <template>
-    <div class="relative mb-6">
-        <div class="flex items-start">
-            <div class="flex items-center h-5">
-                <input
-                    :id="id"
-                    :value="modelValue"
-                    type="checkbox"
-                    class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800"
-                    @input="$emit('update:modelValue', $event.target.checked)"
-                />
-            </div>
-            <label :for="id" class="ml-2 text-md font-medium text-gray-900 dark:text-gray-300">
+    <div class="form-control mb-6">
+        <label class="cursor-pointer label">
+            <input
+                :id="id"
+                :checked="modelValue"
+                type="checkbox"
+                class="checkbox checkbox-primary"
+                @input="$emit('update:modelValue', $event.target.checked)"
+            />
+            <span class="ml-2 text-md font-medium text-gray-900 dark:text-gray-300">
                 {{ label }}
-            </label>
-        </div>
+            </span>
+        </label>
         <SpanError :error="error" class="mb-1" />
     </div>
 </template>

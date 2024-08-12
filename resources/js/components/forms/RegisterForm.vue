@@ -66,8 +66,8 @@ import NormalButton from '@/components/buttons/NormalButton.vue'
 import SpanError from '@/components/common/SpanError.vue'
 import SpanWithActionLink from '@/components/common/SpanWithActionLink.vue'
 import PasswordStrengthIndicator from '@/components/common/PasswordStrengthIndicator.vue'
-import axios from 'axios'
 import { ref } from 'vue'
+import { Inertia } from '@inertiajs/inertia'
 
 export default {
     name: 'RegisterForm',
@@ -106,14 +106,7 @@ export default {
         }
 
         const forgotPassword = async () => {
-            try {
-                await axios.post(route('forgot-password.store'), {
-                    email: form.email
-                })
-                form.success = 'A password reset link has been sent to your email address.'
-            } catch (error) {
-                form.errors.error = error.response.data.message
-            }
+            Inertia.visit(route('forgot-password.index'))
         }
 
         return {

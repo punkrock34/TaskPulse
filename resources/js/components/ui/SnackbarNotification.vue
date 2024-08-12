@@ -6,10 +6,18 @@
             @mouseenter="clearAutoHide"
             @mouseleave="autoHide"
         >
-            <div class="alert bg-primary text-white shadow-lg">
-                <div class="flex-1">
-                    <p>{{ message }}</p>
+            <div
+                class="alert shadow-lg flex items-center justify-between p-4 rounded-lg border bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600"
+            >
+                <div class="flex-1 text-gray-900 dark:text-white">
+                    <p class="font-medium">{{ message }}</p>
                 </div>
+                <button
+                    class="btn btn-sm btn-circle btn-ghost ml-4 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
+                    @click="hide"
+                >
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
         </div>
     </transition>
@@ -56,7 +64,6 @@ export default {
 </script>
 
 <style scoped>
-/* Your existing styles */
 .toast {
     position: fixed;
     bottom: 1rem;
@@ -66,9 +73,9 @@ export default {
     transition:
         transform 0.6s ease-in-out,
         opacity 0.6s ease-in-out;
-
     max-width: 90%;
     padding: 0.75rem;
+    border-radius: 0.5rem; /* Rounded corners */
 }
 
 @media (max-width: 480px) {
@@ -86,7 +93,6 @@ export default {
     }
 }
 
-/* Smooth bounce-in-right */
 .bounce-slide-enter-active {
     animation: bounce-in-right 1.6s ease forwards;
 }
@@ -108,7 +114,6 @@ export default {
     }
 }
 
-/* Refined bounce out */
 .bounce-slide-leave-active {
     animation: bounce-slide-out 1.5s cubic-bezier(0.25, 1, 0.5, 1);
 }
