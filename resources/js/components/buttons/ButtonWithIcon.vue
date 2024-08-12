@@ -14,14 +14,19 @@
         @click="$emit('click')"
     >
         <img v-if="!loading" class="h-5 w-5 mr-2" :src="icon" :alt="alt" />
-        <span v-if="loading" class="loading loading-spinner loading-md mr-2"></span>
+        <LoadingIndicator v-if="loading" size="md" label="Loading..." />
         <span>{{ label }}</span>
     </button>
 </template>
 
 <script>
+import LoadingIndicator from '@/components/common/LoadingIndicator.vue'
+
 export default {
     name: 'ButtonWithIcon',
+    components: {
+        LoadingIndicator
+    },
     props: {
         type: { type: String, default: 'button' },
         label: { type: String, required: true },

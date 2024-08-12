@@ -13,15 +13,19 @@
         ]"
         @click="$emit('click')"
     >
-        <span v-if="loading" class="loading loading-spinner loading-md mr-2"></span>
-        <span v-if="!loading">{{ label }}</span>
-        <span v-else>Loading...</span>
+        <LoadingIndicator v-if="loading" size="md" label="Loading..." />
+        <span v-else>{{ label }}</span>
     </button>
 </template>
 
 <script>
+import LoadingIndicator from '@/components/common/LoadingIndicator.vue'
+
 export default {
     name: 'NormalButton',
+    components: {
+        LoadingIndicator
+    },
     props: {
         type: { type: String, default: 'button' },
         label: { type: String, required: true },

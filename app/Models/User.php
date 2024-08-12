@@ -11,7 +11,7 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    protected $table = DatabaseTables::TASKS->value;
+    protected $table = DatabaseTables::USERS->value;
 
     /**
      * The primary key associated with the table.
