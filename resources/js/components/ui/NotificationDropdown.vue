@@ -51,22 +51,13 @@
                         </div>
                     </li>
                 </ul>
-                <div v-show="unreadCount > 0" class="card-actions justify-end">
-                    <button
-                        class="btn btn-primary btn-block"
-                        :disabled="unreadCount === 0"
-                        @click.prevent.stop="markAllAsRead"
-                    >
-                        Mark all as read
-                    </button>
-                </div>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useStore } from 'vuex'
 
 export default {
@@ -77,12 +68,13 @@ export default {
         const dropdownOpen = ref(false)
         const bellRinging = ref(false)
 
-        // Ensure that the computed property always gets a valid array
-        const unreadCount = computed(() => store.getters.unreadCount || 0)
-        const visibleNotifications = computed(() => store.getters.visibleNotifications || [])
+        const unreadCount = computed(() => store.getters['notifications/unreadCount'] || 0)
+        const visibleNotifications = computed(
+            () => store.getters['notifications/visibleNotifications'] || []
+        )
 
         const dismissNotification = (id) => {
-            store.commit('dismissNotification', id)
+            store.commit('notifications/dismissNotification', id)
             dropdownOpen.value = true
         }
 
@@ -92,59 +84,28 @@ export default {
             }
         }
 
-        const markAllAsRead = () => {
-            store.commit('markAllAsRead')
-        }
-
         const toggleDropdown = () => {
             dropdownOpen.value = !dropdownOpen.value
+
+            if (dropdownOpen.value) {
+                store.commit('notifications/markAllAsRead')
+            }
         }
 
-        const addNotification = (notification) => {
-            store.commit('addNotification', { ...notification, visible: true })
-            bellRinging.value = true
-        }
-
-        // Simulate WebSocket listener
-        const simulateWebSocket = () => {
-            setTimeout(() => {
-                addNotification({
-                    id: Date.now(),
-                    message: 'New WebSocket notification received!',
-                    read: false
-                })
-            }, 5000)
-        }
-
-        simulateWebSocket()
-
-        const simulateNotificationWithAction = () => {
-            setTimeout(() => {
-                addNotification({
-                    id: Date.now() + 1,
-                    message: 'New notification with action received!',
-                    read: false,
-                    action: {
-                        label: 'View',
-                        handler: () => {
-                            alert('View action clicked!')
-                        }
-                    }
-                })
-            }, 10000)
-        }
-
-        simulateNotificationWithAction()
+        // Ring the bell when there are new notifications
+        watch(unreadCount, (count, prevCount) => {
+            if (count > prevCount) {
+                bellRinging.value = true
+            }
+        })
 
         return {
             unreadCount,
             visibleNotifications,
             dismissNotification,
             performAction,
-            markAllAsRead,
             dropdownOpen,
             toggleDropdown,
-            addNotification,
             bellRinging
         }
     }

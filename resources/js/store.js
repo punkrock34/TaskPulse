@@ -1,6 +1,7 @@
 import { createStore } from 'vuex'
 
-const store = createStore({
+const notificationsModule = {
+    namespaced: true,
     state() {
         return {
             notifications: []
@@ -29,6 +30,33 @@ const store = createStore({
             return state.notifications
         }
     }
-})
+}
 
-export default store
+const tasksModule = {
+    namespaced: true,
+    state() {
+        return {
+            tasks: []
+        }
+    },
+    mutations: {
+        addTask(state, task) {
+            state.tasks.push(task)
+        },
+        removeTask(state, id) {
+            state.tasks = state.tasks.filter((task) => task.id !== id)
+        }
+    },
+    getters: {
+        incompleteTasks(state) {
+            return state.tasks.filter((task) => !task.completed)
+        }
+    }
+}
+
+export default createStore({
+    modules: {
+        notifications: notificationsModule,
+        tasks: tasksModule
+    }
+})
