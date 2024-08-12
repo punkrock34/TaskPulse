@@ -1,22 +1,23 @@
 <?php
 
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
-
 use App\Constants\DatabaseTables;
 use App\Constants\TaskStatus;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
     private $tasksTableName = DatabaseTables::TASKS->value;
+
     private $usersTableName = DatabaseTables::USERS->value;
 
     public function up(): void
     {
         if (Schema::hasTable($this->tasksTableName)) {
             Log::info('Tasks table already exists. Skipping...');
+
             return;
         }
 

@@ -2,9 +2,9 @@
 
 namespace Tests\Unit;
 
+use App\Constants\TaskStatus;
 use DateTime;
 use PHPUnit\Framework\TestCase;
-use App\Constants\TaskStatus;
 
 interface RepositoryInterface
 {
@@ -14,11 +14,17 @@ interface RepositoryInterface
 class FakeTask
 {
     public $id;
+
     public $title;
+
     public $description;
+
     public $status;
+
     public $created_at;
+
     public $updated_at;
+
     public $user_id;
 
     public function __construct(

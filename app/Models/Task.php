@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
+use App\Constants\DatabaseTables;
+use App\Constants\TaskStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Constants\{ DatabaseTables, TaskStatus };
 
 class Task extends Model
 {
@@ -13,16 +14,16 @@ class Task extends Model
     protected $table = DatabaseTables::TASKS->value;
 
     protected $primaryKey = 'id';
-    
+
     protected $fillable = [
         'title',
-        'description'
+        'description',
     ];
 
     protected function casts(): array
     {
         return [
-            'status' => TaskStatus::class
+            'status' => TaskStatus::class,
         ];
     }
 

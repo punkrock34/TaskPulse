@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
+use App\Constants\DatabaseTables;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use App\Constants\DatabaseTables;
 
 class User extends Authenticatable
 {
