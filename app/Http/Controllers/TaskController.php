@@ -2,23 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use Inertia\Inertia;
+use App\Services\TaskService;
 
 class TaskController extends Controller
 {
+    protected $taskService;
+
+    public function __construct(TaskService $taskService)
+    {
+        $this->taskService = $taskService;
+    }
+
     public function index()
     {
-        $task = [
-            'id' => 1,
-            'title' => 'Sample Task Title',
-            'description' => 'Sample task description.',
-            'completed' => false,
-            'created_at' => now()->toDateTimeString(),
-            'deadline' => now()->addDay()->toDateTimeString(),
-        ];
-
-        return Inertia::render('TaskDetails', [
-            'task' => $task,
-        ]);
+        return $this->taskService->getAllTasks();
     }
 }
