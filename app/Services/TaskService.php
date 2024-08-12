@@ -10,4 +10,9 @@ class TaskService
     {
         return Task::all();
     }
+
+    public function getTaskById($id)
+    {
+        return Task::find($id);
+    }
 }

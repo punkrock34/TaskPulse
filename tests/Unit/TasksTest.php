@@ -4,13 +4,7 @@ namespace Tests\Unit;
 
 use DateTime;
 use PHPUnit\Framework\TestCase;
-
-enum TaskStatus: string
-{
-    case TODO = 'todo';
-    case IN_PROGRESS = 'in_progress';
-    case COMPLETED = 'completed';
-}
+use App\Constants\TaskStatus;
 
 interface RepositoryInterface
 {
@@ -20,17 +14,11 @@ interface RepositoryInterface
 class FakeTask
 {
     public $id;
-
     public $title;
-
     public $description;
-
     public $status;
-
     public $created_at;
-
     public $updated_at;
-
     public $user_id;
 
     public function __construct(
