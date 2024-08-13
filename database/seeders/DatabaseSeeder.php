@@ -17,10 +17,10 @@ class DatabaseSeeder extends Seeder
             $status = ['todo', 'in_progress', 'completed'];
             $randStatus = array_rand($status);
             Task::create([
-                'title' => 'Task ' . $i,
-                'description' => 'Description for task ' . $i,
+                'title' => 'Task '.$i,
+                'description' => 'Description for task '.$i,
                 'status' => $status[$randStatus],
-                'owner_id' => '03lHqYxmKPanHvZwUNVtCwtQ7jk2'
+                'owner_id' => '03lHqYxmKPanHvZwUNVtCwtQ7jk2',
             ]);
         }
     }
