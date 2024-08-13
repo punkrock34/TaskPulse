@@ -12,6 +12,9 @@ axios.defaults.headers.common['X-CSRF-TOKEN'] = document
     .querySelector('meta[name="csrf-token"]')
     .getAttribute('content')
 
+axios.defaults.withCredentials = true
+axios.defaults.withXSRFToken = true
+
 createInertiaApp({
     resolve: (name) => {
         const pages = import.meta.glob('./pages/**/*.vue', { eager: true })

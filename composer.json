@@ -12,8 +12,6 @@
         "laravel/reverb": "^1.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
-        "mll-lab/laravel-graphiql": "^3.2",
-        "nuwave/lighthouse": "^6.42",
         "tightenco/ziggy": "^2.3"
     },
     "require-dev": {
