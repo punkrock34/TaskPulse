@@ -18,7 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [
             HandleInertiaRequests::class,
         ]);
-        $middleware->api(append: [
+        $middleware->api(prepend: [
             ForceJsonResponse::class,
         ]);
         $middleware->redirectGuestsTo(fn () => route('login.index'));

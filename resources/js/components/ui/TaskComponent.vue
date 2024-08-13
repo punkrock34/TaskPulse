@@ -1,8 +1,8 @@
 <template>
-    <div :class="borderClass" class="card w-full shadow-md mb-4 transition-all duration-300">
+    <div :class="borderClass" class="card w-full shadow-md mb-4 theme-transition">
         <div class="card-body">
             <div class="flex justify-between items-center">
-                <h2 class="card-title text-lg font-semibold">
+                <h2 class="card-title text-lg font-semibold text-gray-900 dark:text-white">
                     {{ task.title }}
                 </h2>
                 <span :class="badgeClass" class="badge badge-outline">{{ statusLabel }}</span>
@@ -15,9 +15,11 @@
                 <span>No deadline set</span>
             </div>
             <div class="card-actions justify-end mt-4">
-                <a :href="route('tasks.show', { id: task.id })" class="btn btn-sm btn-primary">
-                    View Details
-                </a>
+                <LinkButton
+                    :href="route('tasks.show', { id: task.id })"
+                    label="View Details"
+                    type="button"
+                />
             </div>
         </div>
     </div>
@@ -27,9 +29,13 @@
 import { computed } from 'vue'
 import { route } from 'ziggy-js'
 import { TaskStatus } from '@/enums/taskStatus'
+import LinkButton from '@/components/buttons/LinkButton.vue'
 
 export default {
     name: 'TaskComponent',
+    components: {
+        LinkButton
+    },
     props: {
         task: {
             type: Object,
@@ -90,15 +96,3 @@ export default {
     }
 }
 </script>
-
-<style scoped>
-.card {
-    background-color: var(--card-bg);
-    color: var(--card-text);
-}
-
-.dark .card {
-    background-color: var(--dark-card-bg);
-    color: var(--dark-card-text);
-}
-</style>

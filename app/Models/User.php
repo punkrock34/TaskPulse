@@ -66,8 +66,20 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * Get the tasks for the user.
+     */
     public function tasks()
     {
         return $this->hasMany(Task::class, 'owner_id');
     }
+
+    /**
+     * Check if the user has a specific role.
+     */
+    public function hasRole(string $role): bool
+    {
+        return $this->role === $role;
+    }
+
 }
