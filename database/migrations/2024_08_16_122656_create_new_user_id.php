@@ -5,7 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddRoleToUsersTable extends Migration
+return new class extends Migration
 {
     private $usersTableName = DatabaseTables::USERS->value;
 
@@ -15,7 +15,9 @@ class AddRoleToUsersTable extends Migration
     public function up(): void
     {
         Schema::table($this->usersTableName, function (Blueprint $table) {
-            $table->enum('role', ['admin', 'user'])->default('user');
+            $table->renameColumn('id', 'firebase_uid');
+            $table->dropPrimary('users_id_primary');
+            $table->bigIncrements('id')->first();
         });
     }
 
@@ -25,7 +27,9 @@ class AddRoleToUsersTable extends Migration
     public function down(): void
     {
         Schema::table($this->usersTableName, function (Blueprint $table) {
-            $table->dropColumn('role');
+            $table->dropColumn('id');
+            $table->renameColumn('firebase_uid', 'id');
+            $table->primary('id');
         });
     }
-}
+};

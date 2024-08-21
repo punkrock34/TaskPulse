@@ -14,8 +14,8 @@
             </div>
 
             <!-- List of Tasks -->
-            <div v-else-if="tasks.length > 0" class="task-list">
-                <TaskComponent v-for="task in tasks" :key="task.id" :task="task" />
+            <div v-else-if="props.tasks.length > 0" class="task-list">
+                <TaskComponent v-for="task in props.tasks" :key="task.id" :task="task" />
             </div>
 
             <!-- No Tasks Available -->
@@ -27,9 +27,7 @@
 </template>
 
 <script>
-import { route } from 'ziggy-js'
-import { ref, computed, onMounted } from 'vue'
-import axios from 'axios'
+import { ref, computed } from 'vue'
 import { usePage } from '@inertiajs/vue3'
 import AuthenticatedLayout from '@/components/layouts/AuthenticatedLayout.vue'
 import TaskComponent from '@/components/ui/TaskComponent.vue'
@@ -42,43 +40,22 @@ export default {
         TaskComponent,
         LoadingIndicator
     },
-    setup() {
+    props: {
+        tasks: {
+            type: Array,
+            required: true
+        }
+    },
+    setup(props) {
         const page = usePage()
         const user = computed(() => page.props.auth.user)
 
-        const tasks = ref([])
         const loading = ref(false)
-
-        const fetchTasks = async () => {
-            loading.value = true
-            try {
-                // Simulate a delay to avoid awkwardly fast loading
-                const timeStart = performance.now()
-                const response = await axios.get(route('tasks.index'))
-                const timeEnd = performance.now()
-
-                if (timeEnd - timeStart < 1000) {
-                    await new Promise((resolve) =>
-                        setTimeout(resolve, 1000 - (timeEnd - timeStart))
-                    )
-                }
-
-                tasks.value = response.data
-            } catch (error) {
-                console.error('There was an error fetching tasks', error)
-            } finally {
-                loading.value = false
-            }
-        }
-
-        onMounted(() => {
-            fetchTasks()
-        })
 
         return {
             user,
-            tasks,
-            loading
+            loading,
+            props
         }
     }
 }

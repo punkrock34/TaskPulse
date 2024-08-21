@@ -14,13 +14,13 @@ class DatabaseSeeder extends Seeder
     {
         //create task with title, description, status, random uid string, 10 times
         for ($i = 1; $i <= 10; $i++) {
-            $status = ['todo', 'in_progress', 'completed'];
+            $status = ['TODO', 'IN_PROGRESS', 'COMPLETED'];
             $randStatus = array_rand($status);
             Task::create([
                 'title' => "Task $i",
                 'description' => "Description for task $i",
                 'status' => $status[$randStatus],
-                'owner_id' => 'NvJWqGVqelXyCHkpTu6HdvPS6tk2',
+                'user_id' => 1,
             ]);
         }
     }

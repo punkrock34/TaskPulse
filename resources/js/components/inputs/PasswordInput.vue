@@ -1,9 +1,10 @@
 <template>
     <div :class="{ 'border-red-500': error }" class="form-control mb-6">
         <label :for="id" class="label">
-            <span class="label-text text-md font-medium text-gray-900 dark:text-gray-300">{{
-                label
-            }}</span>
+            <span class="label-text text-md font-medium text-gray-900 dark:text-gray-300">
+                {{ label }}
+                <span v-if="required" class="text-red-500">*</span>
+            </span>
         </label>
         <div class="relative">
             <input

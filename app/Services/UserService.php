@@ -44,7 +44,7 @@ class UserService
     private function createUser(UserRecord $firebaseUser)
     {
         return User::create([
-            'id' => $firebaseUser->uid,
+            'firebase_uid' => $firebaseUser->uid,
             'name' => $firebaseUser->displayName,
             'email' => $firebaseUser->email,
             'email_verified_at' => $firebaseUser->emailVerified ? now() : null,
@@ -60,7 +60,7 @@ class UserService
     private function updateUser(User $user, UserRecord $firebaseUser)
     {
         $user->update([
-            'id' => $firebaseUser->uid,
+            'firebase_uid' => $firebaseUser->uid,
             'name' => $firebaseUser->displayName,
             'email_verified_at' => $firebaseUser->emailVerified ? now() : null,
             'avatar' => $firebaseUser->photoUrl,

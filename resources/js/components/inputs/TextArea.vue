@@ -6,15 +6,15 @@
                 <span v-if="required" class="text-red-500">*</span>
             </span>
         </label>
-        <input
+        <textarea
             :id="id"
-            :value="modelValue"
-            :type="type"
+            v-model="internalValue"
             :placeholder="placeholder"
-            class="input input-bordered w-full bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-            @input="$emit('update:modelValue', $event.target.value)"
-        />
-        <SpanError :error="error" class="mb-1" />
+            class="textarea textarea-bordered w-full bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+            rows="4"
+            @input="updateValue"
+        ></textarea>
+        <SpanError :error="error" class="mt-1" />
     </div>
 </template>
 
@@ -22,7 +22,7 @@
 import SpanError from '@/components/common/SpanError.vue'
 
 export default {
-    name: 'TextInput',
+    name: 'TextArea',
     components: {
         SpanError
     },
@@ -30,11 +30,25 @@ export default {
         id: { type: String, required: true },
         modelValue: { type: String, required: true },
         label: { type: String, required: true },
-        type: { type: String, default: 'text' },
         placeholder: { type: String, default: '' },
         error: { type: String, default: '' },
         required: { type: Boolean, default: false }
     },
-    emits: ['update:modelValue']
+    emits: ['update:modelValue'],
+    data() {
+        return {
+            internalValue: this.modelValue
+        }
+    },
+    watch: {
+        modelValue(newValue) {
+            this.internalValue = newValue
+        }
+    },
+    methods: {
+        updateValue() {
+            this.$emit('update:modelValue', this.internalValue)
+        }
+    }
 }
 </script>

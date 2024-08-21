@@ -26,14 +26,14 @@ class User extends Authenticatable
      *
      * @var bool
      */
-    public $incrementing = false;
+    public $incrementing = true;
 
     /**
      * The "type" of the auto-incrementing ID.
      *
      * @var string
      */
-    protected $keyType = 'string';
+    protected $keyType = 'int';
 
     /**
      * The attributes that are mass assignable.
@@ -42,6 +42,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'id',
+        'firebase_uid',
         'name',
         'email',
         'email_verified_at',
@@ -71,7 +72,7 @@ class User extends Authenticatable
      */
     public function tasks()
     {
-        return $this->hasMany(Task::class, 'owner_id');
+        return $this->hasMany(Task::class, 'user_id');
     }
 
     /**
@@ -81,5 +82,4 @@ class User extends Authenticatable
     {
         return $this->role === $role;
     }
-
 }

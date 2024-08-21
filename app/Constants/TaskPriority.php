@@ -2,11 +2,11 @@
 
 namespace App\Constants;
 
-enum TaskStatus: string
+enum TaskPriority: string
 {
-    case TODO = 'TODO';
-    case IN_PROGRESS = 'IN_PROGRESS';
-    case COMPLETED = 'COMPLETED';
+    case LOW = 'LOW';
+    case MEDIUM = 'MEDIUM';
+    case HIGH = 'HIGH';
 
     public static function values(): array
     {

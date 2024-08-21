@@ -6,11 +6,13 @@
                 <ThemeToggle />
                 <NotificationDropdown />
                 <!-- Add Task Icon -->
-                <i
-                    class="fas fa-plus text-xl text-gray-900 dark:text-white cursor-pointer"
+                <a
+                    class="text-xl text-gray-900 dark:text-white cursor-pointer"
                     title="Add Task"
-                    @click="simulateTask"
-                ></i>
+                    @click="addTask"
+                >
+                    <i class="fas fa-plus"></i>
+                </a>
                 <div class="dropdown dropdown-end">
                     <label tabindex="0" class="btn btn-ghost btn-circle avatar">
                         <div class="w-8 rounded-full">
@@ -36,7 +38,6 @@ import { usePage } from '@inertiajs/vue3'
 import { Inertia } from '@inertiajs/inertia'
 import ThemeToggle from './ThemeToggleComponent.vue'
 import NotificationDropdown from './NotificationDropdown.vue'
-import { useStore } from 'vuex'
 
 export default {
     name: 'AuthenticatedHeader',
@@ -46,7 +47,6 @@ export default {
     },
     setup() {
         const page = usePage()
-        const store = useStore()
 
         const user = computed(() => page.props.auth.user)
         const avatarUrl = computed(() => {
@@ -60,25 +60,14 @@ export default {
             Inertia.post(route('logout.store'))
         }
 
-        const addTask = (task) => {
-            store.commit('tasks/addTask', task)
-        }
-
-        const simulateTask = () => {
-            addTask({
-                id: Date.now(),
-                title: 'New task added!',
-                description: 'This is a new task that was added to the list.',
-                completed: false,
-                created_at: new Date().toISOString(),
-                deadline: new Date(Date.now() + 86400000).toISOString() // 24 hours from now
-            })
+        const addTask = () => {
+            Inertia.visit(route('create-task.index'))
         }
 
         return {
             avatarUrl,
             logout,
-            simulateTask
+            addTask
         }
     }
 }

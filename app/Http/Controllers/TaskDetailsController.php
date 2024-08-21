@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\TaskService;
 use Inertia\Inertia;
 
-class DashboardController extends Controller
+class TaskDetailsController extends Controller
 {
     public function __construct(
         protected TaskService $taskService
@@ -13,8 +13,10 @@ class DashboardController extends Controller
 
     public function index()
     {
-        return Inertia::render('Dashboard', [
-            'tasks' => $this->taskService->getUserTasks(),
+        $task = $this->taskService->getTask(request()->route('id'));
+
+        return Inertia::render('TaskDetails', [
+            'task' => $task->toArray(),
         ]);
     }
 }
