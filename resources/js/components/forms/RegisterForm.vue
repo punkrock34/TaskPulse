@@ -51,7 +51,12 @@
                 :has-error="form.errors.terms"
                 :error="form.errors.terms"
             />
-            <NormalButton type="submit" label="Sign up" :loading="loading" />
+            <NormalButton
+                type="submit"
+                label="Sign up"
+                :loading="loading"
+                :custom-class="'bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white'"
+            />
         </form>
     </div>
 </template>

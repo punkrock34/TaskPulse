@@ -34,7 +34,12 @@
         >
             Forgot password?
         </a>
-        <NormalButton type="submit" label="Sign In" :loading="loading" />
+        <NormalButton
+            type="submit"
+            label="Sign In"
+            :loading="loading"
+            :custom-class="'bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white'"
+        />
     </form>
 </template>
 

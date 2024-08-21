@@ -27,7 +27,12 @@
             :error="form.errors.password_confirmation"
         />
         <PasswordStrengthIndicator :password="form.password" />
-        <NormalButton type="submit" label="Reset Password" :loading="loading" />
+        <NormalButton
+            type="submit"
+            label="Reset Password"
+            :loading="loading"
+            :custom-class="'bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white'"
+        />
     </form>
 </template>
 

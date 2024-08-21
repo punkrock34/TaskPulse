@@ -13,7 +13,12 @@
                 :required="true"
                 :error="form.errors.email"
             />
-            <NormalButton type="submit" label="Send Password Reset Link" :loading="loading" />
+            <NormalButton
+                type="submit"
+                label="Send Password Reset Link"
+                :loading="loading"
+                :custom-class="'bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white'"
+            />
         </form>
     </div>
 </template>

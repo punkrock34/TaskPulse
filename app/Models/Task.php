@@ -19,7 +19,7 @@ class Task extends Model
     protected $fillable = [
         'title',
         'description',
-        'user_id',  // Ensure user_id is fillable
+        'user_id',
         'deadline',
         'priority',
         'status',

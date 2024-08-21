@@ -46,7 +46,12 @@
         />
 
         <!-- Form Actions -->
-        <NormalButton type="submit" label="Create Task" :loading="loading" />
+        <NormalButton
+            type="submit"
+            label="Create Task"
+            :loading="loading"
+            :custom-class="'bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white'"
+        />
     </form>
 </template>
 

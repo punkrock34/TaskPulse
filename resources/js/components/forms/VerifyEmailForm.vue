@@ -24,7 +24,11 @@
                 :has-error="errors.email"
                 :error="errors.email"
             />
-            <NormalButton type="submit" label="Resend Verification Email" />
+            <NormalButton
+                type="submit"
+                label="Resend Verification Email"
+                :custom-class="'bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white'"
+            />
         </form>
     </div>
 </template>

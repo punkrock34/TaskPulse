@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\TaskAttachmentController;
 use App\Http\Controllers\TaskCreatorController;
 use App\Http\Controllers\TaskDetailsController;
 use Illuminate\Support\Facades\Auth;
@@ -44,6 +45,9 @@ Route::middleware('auth')->group(function () {
 
         return redirect()->route('login.index');
     })->name('logout.store');
+
+    Route::post('/attachments', [TaskAttachmentController::class, 'store'])->name('attachments.store');
+    Route::delete('/attachments/{attachmentId}', [TaskAttachmentController::class, 'destroy'])->name('attachments.destroy');
 });
 
 // not found page

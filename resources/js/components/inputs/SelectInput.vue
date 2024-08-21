@@ -12,7 +12,12 @@
             class="select select-bordered w-full bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
             @change="updateValue"
         >
-            <option v-for="option in options" :key="option.value" :value="option.value">
+            <option
+                v-for="option in options"
+                :key="option.value"
+                :value="option.value"
+                :selected="option.value === modelValue"
+            >
                 {{ option.label }}
             </option>
         </select>

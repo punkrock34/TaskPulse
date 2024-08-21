@@ -9,7 +9,8 @@
             'bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600',
             'text-gray-900 dark:text-white',
             'hover:bg-gray-100 dark:hover:bg-gray-700',
-            'focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700'
+            'focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700',
+            customClass
         ]"
         @click="$emit('click')"
     >
@@ -29,7 +30,8 @@ export default {
     props: {
         type: { type: String, default: 'button' },
         label: { type: String, required: true },
-        loading: { type: Boolean, default: false }
+        loading: { type: Boolean, default: false },
+        customClass: { type: String, default: '' }
     },
     emits: ['click']
 }

@@ -1,5 +1,5 @@
 export const TaskPriority = {
-    LOW: 'low',
-    MEDIUM: 'medium',
-    HIGH: 'high'
+    LOW: 'LOW',
+    MEDIUM: 'MEDIUM',
+    HIGH: 'HIGH'
 }

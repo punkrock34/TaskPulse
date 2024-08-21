@@ -13,7 +13,7 @@
         <!-- Deadline Field -->
         <DateInput
             id="deadline"
-            v-model="form.deadline"
+            v-model="deadline"
             label="Deadline"
             :min-date="minDate"
             :error="form.errors.deadline"
@@ -46,7 +46,6 @@
                 label="Status"
                 :options="statusOptions"
                 :error="form.errors.status"
-                required
             />
 
             <SelectInput
@@ -55,7 +54,6 @@
                 label="Priority"
                 :options="priorityOptions"
                 :error="form.errors.priority"
-                required
             />
         </div>
 
@@ -71,21 +69,17 @@
 
         <!-- Attachments Section -->
         <div class="mt-6">
-            <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Attachments</h3>
-            <ul class="list-disc pl-5 mb-4">
-                <li v-for="attachment in form.attachments" :key="attachment.id">
-                    <a :href="attachment.path" target="_blank">{{ attachment.name }}</a>
-                    <button class="text-red-500 ml-2" @click="removeAttachment(attachment.id)">
-                        Remove
-                    </button>
-                </li>
-            </ul>
-            <NormalButton label="Manage Attachments" @click="showModal = true" />
+            <NormalButton label="Manage Attachments" @click="toggleModal" />
         </div>
 
         <!-- Task Actions -->
         <div class="card-actions justify-end mt-6">
-            <NormalButton type="submit" label="Save Changes" :loading="loading" />
+            <NormalButton
+                type="submit"
+                label="Save Changes"
+                :loading="loading"
+                :custom-class="'bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white'"
+            />
         </div>
 
         <!-- Success/Error Messages -->
@@ -96,8 +90,8 @@
         <AttachmentModal
             :visible="showModal"
             :attachments="form.attachments"
-            @close="showModal = false"
-            @remove="removeAttachment"
+            :task-id="form.id"
+            @close="toggleModal"
         />
     </form>
 </template>
@@ -113,6 +107,8 @@ import NormalButton from '@/components/buttons/NormalButton.vue'
 import SpanError from '@/components/common/SpanError.vue'
 import SpanSuccess from '@/components/common/SpanSuccess.vue'
 import AttachmentModal from '@/components/ui/AttachmentModal.vue'
+import { TaskStatus } from '../../enums/taskStatus'
+import { TaskPriority } from '../../enums/taskPriority'
 
 export default {
     name: 'TaskDetailsForm',
@@ -144,50 +140,19 @@ export default {
             deadline: props.task.deadline || ''
         })
 
-        const minDate = ref(new Date(Date.now() + 86400000).toISOString().split('T')[0])
+        const minDate = ref(getMinDate())
 
-        const formattedCreatedAt = computed(() => new Date(form.created_at).toLocaleDateString())
+        const formattedCreatedAt = computed(() => formatCreatedAt(form.created_at))
 
-        const calculateTimeRemaining = () => {
-            if (!form.deadline) return 'No Deadline'
+        const timeRemaining = ref(calculateTimeRemaining(form.deadline))
 
-            const deadline = new Date(form.deadline)
-            const now = new Date()
-            const diff = deadline - now
+        const timeRemainingClass = computed(() => getTimeRemainingClass(form.deadline))
 
-            if (diff < 0) {
-                const days = Math.abs(Math.floor(diff / (1000 * 60 * 60 * 24)))
-                const hours = Math.abs(
-                    Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
-                )
-                const minutes = Math.abs(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)))
-                const seconds = Math.abs(Math.floor((diff % (1000 * 60)) / 1000))
-
-                return `-${days}d ${hours}h ${minutes}m ${seconds}s`
-            }
-
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24))
-            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
-            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
-            const seconds = Math.floor((diff % (1000 * 60)) / 1000)
-
-            return `${days}d ${hours}h ${minutes}m ${seconds}s`
-        }
-
-        const timeRemaining = ref(calculateTimeRemaining())
-
-        const timeRemainingClass = computed(() => {
-            const diff = new Date(form.deadline) - new Date()
-            return diff < 0
-                ? 'text-red-500'
-                : diff < 172800000
-                  ? 'text-yellow-500'
-                  : 'text-green-500'
-        })
+        const deadline = new Date(form.deadline).toISOString().split('T')[0]
 
         onMounted(() => {
             const interval = setInterval(() => {
-                timeRemaining.value = calculateTimeRemaining()
+                timeRemaining.value = calculateTimeRemaining(form.deadline)
             }, 1000)
 
             onBeforeUnmount(() => {
@@ -195,28 +160,21 @@ export default {
             })
         })
 
-        const statusOptions = [
-            { value: 'TODO', label: 'To Do' },
-            { value: 'IN_PROGRESS', label: 'In Progress' },
-            { value: 'COMPLETED', label: 'Completed' }
-        ]
+        const statusOptions = Object.values(TaskStatus).map((status) => ({
+            value: status,
+            label: formatStatusLabel(status)
+        }))
 
-        const priorityOptions = [
-            { value: 'LOW', label: 'Low' },
-            { value: 'MEDIUM', label: 'Medium' },
-            { value: 'HIGH', label: 'High' }
-        ]
+        const priorityOptions = Object.values(TaskPriority).map((priority) => ({
+            value: priority,
+            label: formatPriorityLabel(priority)
+        }))
 
-        const handleSubmit = () => {
+        function handleSubmit() {
             loading.value = true
-
             form.put(`/tasks/${form.id}`, {
-                onSuccess: () => {
-                    form.success = 'Task updated successfully!'
-                },
-                onError: (errors) => {
-                    form.errors.error = errors.error
-                },
+                onSuccess: () => (form.success = 'Task updated successfully!'),
+                onError: (errors) => (form.errors.error = errors.error),
                 onFinish: () => {
                     loading.value = false
                     emit('submit')
@@ -224,22 +182,8 @@ export default {
             })
         }
 
-        const removeAttachment = (id) => {
-            if (confirm('Are you sure you want to remove this attachment?')) {
-                loading.value = true
-                useForm().delete(`/attachments/${id}`, {
-                    onSuccess: () => {
-                        form.attachments = form.attachments.filter((att) => att.id !== id)
-                        form.success = 'Attachment removed successfully!'
-                    },
-                    onError: (errors) => {
-                        form.errors.error = errors.error
-                    },
-                    onFinish: () => {
-                        loading.value = false
-                    }
-                })
-            }
+        function toggleModal() {
+            showModal.value = !showModal.value
         }
 
         return {
@@ -253,8 +197,67 @@ export default {
             loading,
             showModal,
             handleSubmit,
-            removeAttachment
+            toggleModal,
+            deadline
         }
     }
+}
+
+// Helper functions
+function getMinDate() {
+    return new Date(Date.now() + 86400000).toISOString().split('T')[0]
+}
+
+function formatCreatedAt(createdAt) {
+    return new Date(createdAt).toLocaleDateString()
+}
+
+function calculateTimeRemaining(deadline) {
+    if (!deadline) return 'No Deadline'
+    const deadlineDate = new Date(deadline)
+    const now = new Date()
+    const diff = deadlineDate - now
+    return diff < 0 ? formatOverdueTime(diff) : formatRemainingTime(diff)
+}
+
+function formatOverdueTime(diff) {
+    const days = Math.abs(Math.floor(diff / (1000 * 60 * 60 * 24)))
+    const hours = Math.abs(Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)))
+    const minutes = Math.abs(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)))
+    const seconds = Math.abs(Math.floor((diff % (1000 * 60)) / 1000))
+    return `-${days}d ${hours}h ${minutes}m ${seconds}s`
+}
+
+function formatRemainingTime(diff) {
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24))
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000)
+    return `${days}d ${hours}h ${minutes}m ${seconds}s`
+}
+
+function getTimeRemainingClass(deadline) {
+    const diff = new Date(deadline) - new Date()
+    if (diff < 0) return 'text-red-500'
+    if (diff < 172800000) return 'text-yellow-500'
+    return 'text-green-500'
+}
+
+function formatStatusLabel(status) {
+    const labels = {
+        [TaskStatus.TODO]: 'To Do',
+        [TaskStatus.IN_PROGRESS]: 'In Progress',
+        [TaskStatus.COMPLETED]: 'Completed'
+    }
+    return labels[status] || status
+}
+
+function formatPriorityLabel(priority) {
+    const labels = {
+        [TaskPriority.LOW]: 'Low',
+        [TaskPriority.MEDIUM]: 'Medium',
+        [TaskPriority.HIGH]: 'High'
+    }
+    return labels[priority] || priority
 }
 </script>
