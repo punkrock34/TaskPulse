@@ -148,7 +148,7 @@ export default {
 
         const timeRemainingClass = computed(() => getTimeRemainingClass(form.deadline))
 
-        const deadline = new Date(form.deadline).toISOString().split('T')[0]
+        const deadline = form.deadline ? new Date(form.deadline).toISOString().split('T')[0] : ''
 
         onMounted(() => {
             const interval = setInterval(() => {
