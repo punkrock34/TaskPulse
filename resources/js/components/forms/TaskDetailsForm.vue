@@ -136,6 +136,7 @@ export default {
         // Initialize form with useForm and bind the task data
         const form = useForm({
             ...props.task,
+            description: props.task.description || '',
             notes: props.task.notes || '',
             deadline: props.task.deadline || ''
         })

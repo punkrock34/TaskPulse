@@ -16,7 +16,6 @@
             label="Email Address"
             type="email"
             placeholder="name@company.com"
-            :required="true"
             :error="form.errors.email"
         />
         <PasswordInput
@@ -24,7 +23,6 @@
             v-model="form.password"
             label="Password"
             placeholder="••••••••"
-            :required="true"
             :error="form.errors.password"
         />
         <CheckboxInput id="remember" v-model="form.remember" label="Remember me" />

@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
-class AttachmentDeleteRequest extends FormRequest
+class TaskAttachmentUploadRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,7 +23,8 @@ class AttachmentDeleteRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'attachment_id' => ['required', 'integer', 'exists:attachments,id'],
+            'task_id' => ['required', 'integer', 'exists:tasks,id'],
+            'attachment' => ['required', 'file', 'max:10240'],
         ];
     }
 }

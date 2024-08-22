@@ -10,8 +10,10 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TaskAttachmentController;
 use App\Http\Controllers\TaskCreatorController;
 use App\Http\Controllers\TaskDetailsController;
+use App\Http\Middleware\CheckFilePermission;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 Route::middleware('guest')->group(function () {
     Route::get('/', [LoginController::class, 'index'])->name('login.index');
@@ -47,8 +49,17 @@ Route::middleware('auth')->group(function () {
     })->name('logout.store');
 
     Route::post('/attachments', [TaskAttachmentController::class, 'store'])->name('attachments.store');
-    Route::delete('/attachments/{attachmentId}', [TaskAttachmentController::class, 'destroy'])->name('attachments.destroy');
+    Route::delete('/attachments/{attachment}', [TaskAttachmentController::class, 'destroy'])->name('attachments.destroy');
 });
+
+Route::get('/storage/task-attachments/{fileName}', function ($fileName) {
+    $path = Storage::disk('public')->path("task-attachments/$fileName");
+    if (! Storage::disk('public')->exists("task-attachments/$fileName")) {
+        abort(404);
+    }
+
+    return response()->file($path);
+})->middleware('auth', CheckFilePermission::class)->name('attachments.show');
 
 // not found page
 Route::get('/{any}', function () {

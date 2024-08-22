@@ -3,7 +3,6 @@
         <label :for="id" class="label">
             <span class="label-text text-md font-medium text-gray-900 dark:text-gray-300">
                 {{ label }}
-                <span v-if="required" class="text-red-500">*</span>
             </span>
         </label>
         <div class="relative">

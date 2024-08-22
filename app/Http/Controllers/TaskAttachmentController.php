@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\AttachmentDeleteRequest;
-use App\Http\Requests\AttachmentUploadRequest;
+use App\Http\Requests\TaskAttachmentDeleteRequest;
+use App\Http\Requests\TaskAttachmentUploadRequest;
+use App\Models\Attachment;
 use App\Services\TaskAttachmentService;
 
 class TaskAttachmentController extends Controller
@@ -12,17 +13,21 @@ class TaskAttachmentController extends Controller
         protected TaskAttachmentService $taskAttachmentService
     ) {}
 
-    public function store(AttachmentUploadRequest $request)
+    public function store(TaskAttachmentUploadRequest $request)
     {
         $request->validated();
         $taskId = $request->task_id;
         $attachment = $request->file('attachment');
 
         try {
-            $this->taskAttachmentService->store($attachment, $taskId);
+            // Store the attachment and get the newly created attachment record
+            $newAttachment = $this->taskAttachmentService->store($attachment, $taskId);
 
             return $request->wantsJson()
-                ? response()->json(['message' => 'Attachment uploaded successfully'], 201)
+                ? response()->json([
+                    'message' => 'Attachment uploaded successfully',
+                    'attachment' => $newAttachment,
+                ], 201)
                 : back()->with('success', 'Attachment uploaded successfully');
 
         } catch (\Exception $e) {
@@ -32,21 +37,15 @@ class TaskAttachmentController extends Controller
         }
     }
 
-    public function destroy(AttachmentDeleteRequest $request)
+    public function destroy(TaskAttachmentDeleteRequest $request, $attachmentId)
     {
-        $attachmentId = $request->attachment_id;
-
         try {
+            $request->validated();
             $this->taskAttachmentService->destroy($attachmentId);
 
-            return $request->wantsJson()
-                ? response()->json(['message' => 'Attachment deleted successfully'], 200)
-                : back()->with('success', 'Attachment deleted successfully');
-
+            return response()->json(['message' => 'Attachment deleted successfully'], 200);
         } catch (\Exception $e) {
-            return $request->wantsJson()
-                ? response()->json(['message' => 'Attachment deletion failed'], 500)
-                : back()->with('error', 'Attachment deletion failed');
+            return response()->json(['message' => 'Attachment deletion failed'], 500);
         }
     }
 }
