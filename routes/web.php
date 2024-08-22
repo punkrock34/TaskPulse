@@ -41,7 +41,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/task/{id}', [TaskDetailsController::class, 'index'])->name('task.index');
 
     Route::post('/create-task', [TaskCreatorController::class, 'store'])->name('create-task.store');
-    Route::post('/task/{id}', [TaskDetailsController::class, 'update'])->name('task.update');
+    Route::put('/task/{id}', [TaskDetailsController::class, 'update'])->name('task.update');
     Route::post('/logout', function () {
         Auth::logout();
 

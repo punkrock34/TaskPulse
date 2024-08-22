@@ -13,7 +13,7 @@
         <!-- Deadline Field -->
         <DateInput
             id="deadline"
-            v-model="deadline"
+            v-model="form.deadline"
             label="Deadline"
             :min-date="minDate"
             :error="form.errors.deadline"
@@ -77,7 +77,8 @@
             <NormalButton
                 type="submit"
                 label="Save Changes"
-                :loading="loading"
+                :loading="form.processing"
+                :disabled="form.processing"
                 :custom-class="'bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white'"
             />
         </div>
@@ -97,8 +98,9 @@
 </template>
 
 <script>
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useForm } from '@inertiajs/vue3'
+import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
+import { route } from 'ziggy-js'
 import TextInput from '@/components/inputs/TextInput.vue'
 import TextArea from '@/components/inputs/TextArea.vue'
 import SelectInput from '@/components/inputs/SelectInput.vue'
@@ -128,28 +130,56 @@ export default {
             required: true
         }
     },
-    emits: ['submit'],
+    emits: ['submit', 'update-border-color'],
     setup(props, { emit }) {
-        const loading = ref(false)
-        const showModal = ref(false)
-
-        // Initialize form with useForm and bind the task data
         const form = useForm({
-            ...props.task,
+            id: props.task.id,
+            title: props.task.title,
             description: props.task.description || '',
+            status: props.task.status,
+            priority: props.task.priority,
+            deadline: props.task.deadline
+                ? new Date(props.task.deadline).toISOString().split('T')[0]
+                : '',
             notes: props.task.notes || '',
-            deadline: props.task.deadline || ''
+            attachments: props.task.attachments || []
         })
 
+        const showModal = ref(false)
         const minDate = ref(getMinDate())
 
-        const formattedCreatedAt = computed(() => formatCreatedAt(form.created_at))
-
+        const formattedCreatedAt = computed(() => formatCreatedAt(props.task.created_at))
         const timeRemaining = ref(calculateTimeRemaining(form.deadline))
-
         const timeRemainingClass = computed(() => getTimeRemainingClass(form.deadline))
 
-        const deadline = form.deadline ? new Date(form.deadline).toISOString().split('T')[0] : ''
+        watch(
+            () => form.deadline,
+            (newDeadline) => {
+                timeRemaining.value = calculateTimeRemaining(newDeadline)
+            }
+        )
+
+        watch(
+            () => form.status,
+            (newStatus) => {
+                emit('update-border-color', getBorderColorClass(newStatus))
+            }
+        )
+
+        watch(
+            () => props.task,
+            (newTask) => {
+                Object.keys(form).forEach((key) => {
+                    if (key in newTask) {
+                        form[key] = newTask[key]
+                    }
+                })
+                if (newTask.deadline) {
+                    form.deadline = new Date(newTask.deadline).toISOString().split('T')[0]
+                }
+            },
+            { deep: true }
+        )
 
         onMounted(() => {
             const interval = setInterval(() => {
@@ -172,19 +202,43 @@ export default {
         }))
 
         function handleSubmit() {
-            loading.value = true
-            form.put(`/tasks/${form.id}`, {
-                onSuccess: () => (form.success = 'Task updated successfully!'),
-                onError: (errors) => (form.errors.error = errors.error),
-                onFinish: () => {
-                    loading.value = false
-                    emit('submit')
+            form.put(route('task.update', form.id), {
+                preserveState: true,
+                preserveScroll: true,
+                onSuccess: (page) => {
+                    const updatedTask = page.props.task
+                    Object.keys(form).forEach((key) => {
+                        if (key in updatedTask) {
+                            form[key] = updatedTask[key]
+                        }
+                    })
+                    if (updatedTask.deadline) {
+                        form.deadline = new Date(updatedTask.deadline).toISOString().split('T')[0]
+                    }
+                    form.success = page.props.success
+                    emit('update-border-color', getBorderColorClass(form.status))
+                },
+                onError: (errors) => {
+                    form.errors.error = errors
                 }
             })
         }
 
         function toggleModal() {
             showModal.value = !showModal.value
+        }
+
+        function getBorderColorClass(status) {
+            switch (status) {
+                case TaskStatus.TODO:
+                    return 'border-yellow-400'
+                case TaskStatus.IN_PROGRESS:
+                    return 'border-blue-400'
+                case TaskStatus.COMPLETED:
+                    return 'border-green-400'
+                default:
+                    return 'border-gray-400'
+            }
         }
 
         return {
@@ -195,16 +249,13 @@ export default {
             timeRemainingClass,
             statusOptions,
             priorityOptions,
-            loading,
             showModal,
             handleSubmit,
-            toggleModal,
-            deadline
+            toggleModal
         }
     }
 }
 
-// Helper functions
 function getMinDate() {
     return new Date(Date.now() + 86400000).toISOString().split('T')[0]
 }

@@ -1,15 +1,33 @@
 <template>
     <AuthenticatedLayout>
+        <div class="mb-4">
+            <a
+                :href="route('dashboard.index')"
+                class="text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 flex items-center"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5 mr-2"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                    />
+                </svg>
+                Back to Dashboard
+            </a>
+        </div>
         <div
             :class="borderClass"
             class="p-6 sm:p-8 bg-white dark:bg-gray-800 rounded-lg shadow-md theme-transition"
         >
             <div class="card-body">
-                <TaskDetailsForm
-                    :task="localTask"
-                    @submit="submit"
-                    @update-border-color="updateBorderColor"
-                />
+                <TaskDetailsForm :task="localTask" @update-border-color="updateBorderColor" />
             </div>
         </div>
     </AuthenticatedLayout>
@@ -17,6 +35,7 @@
 
 <script>
 import { computed, reactive, ref } from 'vue'
+import { route } from 'ziggy-js'
 import AuthenticatedLayout from '@/components/layouts/AuthenticatedLayout.vue'
 import TaskDetailsForm from '@/components/forms/TaskDetailsForm.vue'
 
@@ -53,10 +72,6 @@ export default {
         // Set initial border class
         borderClass.value = initialBorderClass.value
 
-        const submit = () => {
-            // Submission logic handled by the TaskDetailsForm
-        }
-
         const updateBorderColor = (newBorderColor) => {
             borderClass.value = `border-l-4 ${newBorderColor}`
         }
@@ -64,8 +79,8 @@ export default {
         return {
             localTask,
             borderClass,
-            submit,
-            updateBorderColor
+            updateBorderColor,
+            route // Expose route function to the template
         }
     }
 }
