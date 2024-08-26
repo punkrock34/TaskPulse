@@ -129,19 +129,7 @@ After installing the prerequisites and cloning the repository, follow these step
      VITE_FIREBASE_MEASUREMENT_ID=<your-firebase-measurement-id>
      ```
 
-4. **Add Reverb configuration to .env:**
-   - In the same `.env` file, add the following variables for Reverb:
-
-     ```env
-     REVERB_APP_ID=<reverb-app_id>
-     REVERB_APP_KEY=<reverb-app_key>
-     REVERB_APP_SECRET=<reverb-app_secret>
-     REVERB_HOST=localhost
-     REVERB_PORT=8080
-     REVERB_SCHEME=http
-     ```
-
-5. **(Optional) Configure Mail settings:**
+4. **(Optional) Configure Mail settings:**
    - If you want to use Mailhog with `ddev`, add these variables to your `.env` file:
 
      ```env
@@ -155,46 +143,46 @@ After installing the prerequisites and cloning the repository, follow these step
      MAIL_FROM_NAME="${APP_NAME}"
      ```
 
-6. **Start the ddev environment:**
+5. **Start the ddev environment:**
 
     ```sh
     ddev start
     ```
 
-7. **Install Composer dependencies:**
+6. **Install Composer dependencies:**
 
     ```sh
     ddev composer update
     ```
 
-8. **Generate application key:**
+7. **Generate application key:**
 
     ```sh
     ddev artisan key:generate
     ```
 
-9. **Configure Reverb and other settings:**
+8. **Configure settings:**
    - Open the `.env` file and replace where needed.
 
-10. **Run tests to verify setup:**
+9. **Run tests to verify setup:**
 
     ```sh
     ddev artisan test
     ```
 
-11. **Install NPM dependencies:**
+10 **Install NPM dependencies:**
 
     ```sh
     ddev npm install
     ```
 
-12. **In a secondary terminal window, run Vite:**
+11. **In a secondary terminal window, run Vite:**
 
     ```sh
     ddev npm run dev
     ```
 
-13. **Launch the application:**
+12. **Launch the application:**
 
     ```sh
     ddev launch
@@ -202,14 +190,13 @@ After installing the prerequisites and cloning the repository, follow these step
 
     This command will open the application in your default web browser. The URL should match the APP_URL in your `.env` file.
 
-14. **Database management (optional):**
+13. **Database management (optional):**
 
     To interact with the database, you can use:
 
     ```sh
     ddev mysql    
     ```
-
 
 ## Database GUIs
 
