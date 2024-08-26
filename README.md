@@ -8,7 +8,6 @@ TaskPulse is a web application built with Laravel and Vite, utilizing ddev for l
 - Task CRUD operations
 - Task labeling
 - Task status
-- Due date notification system
 
 ## Quick Start
 
@@ -42,6 +41,7 @@ For detailed setup instructions and documentation, please refer to the [docs](./
 - Inertia
 - Firebase
 - Docker
+- DDEV
 
 ## Contributing
 
