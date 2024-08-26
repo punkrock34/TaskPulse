@@ -2,8 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Task;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,11 +12,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        //create task with title, description, status, random uid string, 10 times
+        for ($i = 1; $i <= 10; $i++) {
+            $status = ['TODO', 'IN_PROGRESS', 'COMPLETED'];
+            $randStatus = array_rand($status);
+            Task::create([
+                'title' => "Task $i",
+                'description' => "Description for task $i",
+                'status' => $status[$randStatus],
+                'user_id' => 1,
+            ]);
+        }
     }
 }

@@ -1,6 +1,4 @@
 import '@fortawesome/fontawesome-free/css/all.min.css'
-import './bootstrap'
-import 'flowbite'
 import axios from 'axios'
 
 import { createApp, h } from 'vue'
@@ -12,6 +10,9 @@ import { ZiggyVue } from 'ziggy-js'
 axios.defaults.headers.common['X-CSRF-TOKEN'] = document
     .querySelector('meta[name="csrf-token"]')
     .getAttribute('content')
+
+axios.defaults.withCredentials = true
+axios.defaults.withXSRFToken = true
 
 createInertiaApp({
     resolve: (name) => {

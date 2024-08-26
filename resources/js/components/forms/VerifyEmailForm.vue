@@ -1,7 +1,9 @@
 <template>
     <div>
-        <SpanError :has-error="errors.error" :error="errors.error" />
+        <SpanError :has-error="errors.error" :error="errors.error" class="mb-1" />
         <SpanWithActionLink
+            v-show="errors.resend_verification"
+            class="mb-1"
             :has-action-link="errors.resend_verification"
             :pre-action-text="'Please verify your email address. If you did not receive the email, you can'"
             :action-text="'Resend verification email'"
@@ -22,7 +24,11 @@
                 :has-error="errors.email"
                 :error="errors.email"
             />
-            <NormalButton type="submit" label="Resend Verification Email" />
+            <NormalButton
+                type="submit"
+                label="Resend Verification Email"
+                :custom-class="'bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white'"
+            />
         </form>
     </div>
 </template>

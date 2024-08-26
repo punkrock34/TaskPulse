@@ -2,73 +2,60 @@
 
 namespace App\Services;
 
-use App\Exceptions\AuthServiceException;
 use App\Exceptions\FailedToSendPasswordForgotEmailException;
-use App\Exceptions\GeneralFirebaseException;
-use App\Exceptions\UnexpectedErrorException;
 use App\Exceptions\UserNotFoundException;
 use App\Mail\Auth\ResetPasswordMail;
-use Illuminate\Mail\SentMessage;
+use App\Services\Firebase\FirebaseTokenService;
+use App\Services\Firebase\FirebaseUserService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use Kreait\Firebase\Auth as FirebaseAuth;
-use Kreait\Firebase\Auth\SendActionLink\FailedToSendActionLink;
 use Kreait\Firebase\Auth\UserRecord;
-use Kreait\Firebase\Exception\Auth\UserNotFound;
-use Kreait\Firebase\Exception\AuthException;
-use Kreait\Firebase\Exception\FirebaseException;
+use Lcobucci\JWT\UnencryptedToken;
 
 class ForgotPasswordService
 {
-    public function __construct(protected FirebaseAuth $auth) {}
+    public function __construct(
+        protected FirebaseTokenService $firebaseTokenService,
+        protected FirebaseUserService $firebaseUserService,
+    ) {}
 
     /**
      * Forgot Password Handler for Firebase
      *
-     * @throws UserNotFoundException
-     * @throws AuthServiceException
-     * @throws GeneralFirebaseException
-     * @throws UnexpectedErrorException
+     * @throws FailedToSendPasswordForgotEmailException
      */
     public function forgot(string $email)
     {
         try {
-            $user = $this->auth->getUserByEmail($email);
-            $this->sendVerificationEmail($user);
-        } catch (UserNotFound $e) {
-            Log::error("User not found when sending password reset link: {$e->getMessage()}");
-            throw new UserNotFoundException('The user was not found.');
-        } catch (FailedToSendActionLink|AuthServiceException|GeneralFirebaseException $e) {
-            Log::error("Firebase error during forgot password: {$e->getMessage()}");
-            throw $e;
-        } catch (\Exception $e) {
-            Log::error("Unexpected error during forgot password: {$e->getMessage()}");
-            throw new UnexpectedErrorException('An unexpected error occurred. Please try again later.');
+            $user = $this->firebaseUserService->getUserByEmail($email);
+        } catch (UserNotFoundException $e) {
+            Log::warning("User tried to reset password with an email that is not registered: {$email}");
+
+            return;
+        }
+
+        $customToken = $this->firebaseTokenService->getCustomToken($user->uid, ['reset_password' => true], 300);
+
+        if (! $this->sendMail($user, $customToken)) {
+            throw new FailedToSendPasswordForgotEmailException;
         }
     }
 
     /**
      * Send Forgot Password Email
      *
-     * @return ?SentMessage
-     *
-     * @throws AuthException
-     * @throws FirebaseException
-     * @throws FailedToSendPasswordForgotEmailException
+     * @return bool
      */
-    private function sendVerificationEmail(UserRecord $user)
+    private function sendMail(UserRecord $user, UnencryptedToken $customToken)
     {
         try {
-            $expireTime = now()->addMinutes(5)->getTimestamp();
-            $customPasswordToken = $this->auth->createCustomToken($user->uid, ['password_reset' => true], $expireTime)->toString();
-            Mail::to($user->email)->send(new ResetPasswordMail($customPasswordToken, $user->displayName));
-        } catch (AuthException $e) {
-            throw new AuthServiceException;
-        } catch (FirebaseException $e) {
-            throw new GeneralFirebaseException;
-        } catch (FailedToSendActionLink $e) {
-            Log::error("Failed to send forgot password email: {$e->getMessage()}");
-            throw new FailedToSendPasswordForgotEmailException;
+            Mail::to($user->email)->send(new ResetPasswordMail($customToken->toString(), $user->displayName));
+
+            return true;
+        } catch (\Exception $e) {
+            Log::error("Failed to send forgot password email to: {$user->email}. Error: ".$e->getMessage());
+
+            return false;
         }
     }
 }

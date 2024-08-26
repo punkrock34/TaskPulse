@@ -34,6 +34,7 @@ class RegisterRequest extends FormRequest
         return [
             'terms.accepted' => 'You must accept the terms and conditions.',
             'password.regex' => 'The password must contain at least one lowercase letter, one uppercase letter, and one digit.',
+            'email.unique' => 'The email address is already in use. Please try logging in instead.',
         ];
     }
 }

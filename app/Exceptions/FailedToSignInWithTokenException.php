@@ -6,7 +6,7 @@ use Exception;
 
 class FailedToSignInWithTokenException extends Exception
 {
-    protected $message = 'Failed to authenticate with the custom token. Please try again.';
+    protected $message = 'The link you used is either invalid or has expired. Please request a new link and try again.';
 
     protected $code = 'error';
 }

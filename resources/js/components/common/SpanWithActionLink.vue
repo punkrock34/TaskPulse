@@ -1,7 +1,7 @@
 <template>
     <transition name="fade-slide" @enter="enter" @leave="leave">
         <span v-show="actionLink" class="mt-1 mb-1 block">
-            <p class="text-red-600 text-md">
+            <p :class="textClass">
                 {{ preActionText }}
             </p>
             <a
@@ -11,7 +11,7 @@
             >
                 {{ actionText }}
             </a>
-            <p v-if="postActionText" class="text-red-600 text-md">
+            <p v-if="postActionText" :class="textClass">
                 {{ postActionText }}
             </p>
         </span>
@@ -25,7 +25,13 @@ export default {
         preActionText: { type: String, default: 'Please verify your email address.' },
         actionText: { type: String, default: 'Resend verification email' },
         postActionText: { type: String, default: '' },
-        actionLink: { type: Function, default: () => {} }
+        actionLink: { type: Function, default: null },
+        isSuccess: { type: Boolean, default: false }
+    },
+    computed: {
+        textClass() {
+            return this.isSuccess ? 'text-green-600 text-md' : 'text-red-600 text-md'
+        }
     },
     methods: {
         enter(el) {
@@ -45,18 +51,3 @@ export default {
     }
 }
 </script>
-
-<style scoped>
-.fade-slide-enter-active,
-.fade-slide-leave-active {
-    transition: opacity 0.5s ease;
-}
-.fade-slide-enter-from,
-.fade-slide-leave-to {
-    opacity: 0;
-}
-.fade-slide-enter-to,
-.fade-slide-leave-from {
-    opacity: 1;
-}
-</style>

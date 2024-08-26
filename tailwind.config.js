@@ -5,9 +5,8 @@ export default {
         './resources/**/*.js',
         './resources/**/*.vue',
         './resources/**/*.ts',
-        './resources/**/*.tsx',
-        './node_modules/flowbite/**/*.js'
+        './resources/**/*.tsx'
     ],
     darkMode: 'class',
-    plugins: [require('flowbite/plugin')]
+    plugins: [require('daisyui')]
 }
