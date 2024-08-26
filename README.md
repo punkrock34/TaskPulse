@@ -21,12 +21,11 @@ TaskPulse is a web application built with Laravel and Vite, utilizing ddev for l
 7. **Obtain Firebase credentials**:
    - Download `firebase_credentials.json` from the Firebase Console and place it in the `storage/app/firebase` directory.
    - Add Firebase credentials to `.env` as described in the Environment Setup section.
-8. **Configure Reverb and (optional) Mail settings**:
-   - Add Reverb and Mail settings to `.env` as described in the Environment Setup section.
+8. **Configure Mail settings (optional)**:
+   - Add Mail settings to `.env` as described in the Environment Setup section.
 9. Launch the application:
    - Terminal 1: `ddev npm run dev`
-   - Terminal 2: `ddev artisan reverb:start`
-   - Terminal 3: `ddev launch` or go to [https://taskpulse.ddev.site](https://taskpulse.ddev.site)
+   - Terminal 2: `ddev launch` or go to [https://taskpulse.ddev.site](https://taskpulse.ddev.site)
 
 For detailed setup instructions and documentation, please refer to the [docs](./docs) folder.
 
