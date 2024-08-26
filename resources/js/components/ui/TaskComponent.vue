@@ -1,22 +1,23 @@
 <template>
-    <div :class="[borderClass, 'card w-full shadow-md mb-4 theme-transition']">
-        <div class="card-body">
-            <div class="flex justify-between items-center">
+    <div :class="['card w-full shadow-md mb-4 theme-transition', borderColorClass]">
+        <div class="card-body p-4">
+            <div class="flex justify-between items-center mb-2">
                 <h2 class="card-title text-lg font-semibold text-gray-900 dark:text-white">
                     {{ task.title }}
                 </h2>
-                <span :class="badgeClass" class="badge badge-outline">{{ statusLabel }}</span>
+                <StatusBadge :status="task.status" />
             </div>
-            <p class="text-gray-600 dark:text-gray-300 mt-2">{{ task.description }}</p>
+            <p class="text-gray-600 dark:text-gray-300 text-sm mb-3">{{ task.description }}</p>
 
-            <div class="text-sm text-gray-500 dark:text-gray-400 mt-4">
-                <span>Time Remaining: </span>
-                <span :class="timeRemainingClass">{{ timeRemaining }}</span>
-            </div>
-
-            <div v-if="task.priority" class="text-sm text-gray-500 dark:text-gray-400 mt-4">
-                <span>Priority: </span>
-                <span :class="priorityClass">{{ priorityLabel }}</span>
+            <div class="grid grid-cols-2 gap-2 text-sm">
+                <div class="flex items-center">
+                    <i class="fas fa-clock mr-2"></i>
+                    <span :class="timeRemainingClass">{{ timeRemaining }}</span>
+                </div>
+                <div class="flex items-center justify-end">
+                    <i class="fas fa-flag mr-2"></i>
+                    <PriorityBadge :priority="task.priority" />
+                </div>
             </div>
 
             <div class="card-actions justify-end mt-4">
@@ -24,6 +25,7 @@
                     :href="route('task.index', { id: task.id })"
                     label="View Details"
                     type="button"
+                    class="btn btn-primary btn-sm"
                 />
             </div>
         </div>
@@ -34,11 +36,17 @@
 import { computed } from 'vue'
 import { route } from 'ziggy-js'
 import LinkButton from '@/components/buttons/LinkButton.vue'
+import StatusBadge from '@/components/common/StatusBadge.vue'
+import PriorityBadge from '@/components/common/PriorityBadge.vue'
+import { TaskStatus } from '@/enums/taskStatus'
+import { TaskPriority } from '@/enums/taskPriority'
 
 export default {
     name: 'TaskComponent',
     components: {
-        LinkButton
+        LinkButton,
+        StatusBadge,
+        PriorityBadge
     },
     props: {
         task: {
@@ -49,107 +57,43 @@ export default {
     setup(props) {
         const timeRemaining = computed(() => {
             if (!props.task.deadline) return 'No Deadline'
-
             const deadline = new Date(props.task.deadline)
             const now = new Date()
             const diff = deadline - now
-
-            if (diff < 0) {
-                return 'Overdue'
-            }
-
+            if (diff < 0) return 'Overdue'
             const days = Math.floor(diff / (1000 * 60 * 60 * 24))
             const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
-            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
-
-            return `${days}d ${hours}h ${minutes}m`
+            return `${days}d ${hours}h`
         })
 
         const timeRemainingClass = computed(() => {
-            if (!props.task.deadline) return ''
-            const deadline = new Date(props.task.deadline)
-            const now = new Date()
-            const diff = deadline - now
-
-            if (diff < 0) return 'text-red-500'
-            if (diff < 1000 * 60 * 60 * 24 * 2) return 'text-yellow-500'
-            return 'text-green-500'
+            if (!props.task.deadline) return 'text-gray-500'
+            const diff = new Date(props.task.deadline) - new Date()
+            if (diff < 0) return 'text-error'
+            if (diff < 1000 * 60 * 60 * 24 * 2) return 'text-warning'
+            return 'text-success'
         })
 
-        const statusLabel = computed(() => {
+        const borderColorClass = computed(() => {
             switch (props.task.status) {
-                case 'TODO':
-                    return 'To Do'
-                case 'IN_PROGRESS':
-                    return 'In Progress'
-                case 'COMPLETED':
-                    return 'Completed'
+                case TaskStatus.TODO:
+                    return 'border-l-4 border-warning'
+                case TaskStatus.IN_PROGRESS:
+                    return 'border-l-4 border-info'
+                case TaskStatus.COMPLETED:
+                    return 'border-l-4 border-success'
                 default:
-                    return 'Unknown'
-            }
-        })
-
-        const priorityLabel = computed(() => {
-            switch (props.task.priority) {
-                case 'LOW':
-                    return 'Low'
-                case 'MEDIUM':
-                    return 'Medium'
-                case 'HIGH':
-                    return 'High'
-                default:
-                    return 'Unknown'
-            }
-        })
-
-        const priorityClass = computed(() => {
-            switch (props.task.priority) {
-                case 'LOW':
-                    return 'text-blue-500'
-                case 'MEDIUM':
-                    return 'text-yellow-500'
-                case 'HIGH':
-                    return 'text-red-500'
-                default:
-                    return ''
-            }
-        })
-
-        const borderClass = computed(() => {
-            switch (props.task.status) {
-                case 'TODO':
-                    return 'border-l-4 border-yellow-400'
-                case 'IN_PROGRESS':
-                    return 'border-l-4 border-blue-400'
-                case 'COMPLETED':
-                    return 'border-l-4 border-green-400'
-                default:
-                    return 'border-l-4 border-gray-400'
-            }
-        })
-
-        const badgeClass = computed(() => {
-            switch (props.task.status) {
-                case 'TODO':
-                    return 'badge-warning'
-                case 'IN_PROGRESS':
-                    return 'badge-info'
-                case 'COMPLETED':
-                    return 'badge-success'
-                default:
-                    return 'badge-ghost'
+                    return 'border-l-4 border-base-300'
             }
         })
 
         return {
             timeRemaining,
             timeRemainingClass,
-            statusLabel,
-            priorityLabel,
-            priorityClass,
-            borderClass,
-            badgeClass,
-            route
+            borderColorClass,
+            route,
+            TaskStatus,
+            TaskPriority
         }
     }
 }

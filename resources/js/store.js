@@ -32,31 +32,8 @@ const notificationsModule = {
     }
 }
 
-const tasksModule = {
-    namespaced: true,
-    state() {
-        return {
-            tasks: []
-        }
-    },
-    mutations: {
-        addTask(state, task) {
-            state.tasks.push(task)
-        },
-        removeTask(state, id) {
-            state.tasks = state.tasks.filter((task) => task.id !== id)
-        }
-    },
-    getters: {
-        incompleteTasks(state) {
-            return state.tasks.filter((task) => !task.completed)
-        }
-    }
-}
-
 export default createStore({
     modules: {
-        notifications: notificationsModule,
-        tasks: tasksModule
+        notifications: notificationsModule
     }
 })

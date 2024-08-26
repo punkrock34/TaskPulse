@@ -1,33 +1,46 @@
 <template>
     <form class="space-y-6" @submit.prevent="handleSubmit">
         <!-- Task Metadata -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <p class="text-sm text-gray-500 dark:text-gray-400">
-                Created At: {{ formattedCreatedAt }}
-            </p>
-            <p class="text-sm text-gray-500 dark:text-gray-400 text-right">
-                Time Remaining: <span :class="timeRemainingClass">{{ timeRemaining }}</span>
-            </p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+            <div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                <i class="fas fa-calendar-alt mr-2"></i>
+                Created: {{ formattedCreatedAt }}
+            </div>
+            <div class="flex items-center justify-end text-sm">
+                <i class="fas fa-clock mr-2"></i>
+                Time Remaining:
+                <span :class="['ml-1', timeRemainingClass]">{{ timeRemaining }}</span>
+            </div>
         </div>
 
-        <!-- Deadline Field -->
-        <DateInput
-            id="deadline"
-            v-model="form.deadline"
-            label="Deadline"
-            :min-date="minDate"
-            :error="form.errors.deadline"
-        />
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Task Title -->
+            <TextInput
+                id="title"
+                v-model="form.title"
+                label="Title"
+                placeholder="Task Title"
+                :error="form.errors.title"
+                required
+            >
+                <template #icon>
+                    <i class="fas fa-tasks"></i>
+                </template>
+            </TextInput>
 
-        <!-- Task Title -->
-        <TextInput
-            id="title"
-            v-model="form.title"
-            label="Title"
-            placeholder="Task Title"
-            :error="form.errors.title"
-            required
-        />
+            <!-- Deadline Field -->
+            <DateInput
+                id="deadline"
+                v-model="form.deadline"
+                label="Deadline"
+                :min-date="minDate"
+                :error="form.errors.deadline"
+            >
+                <template #icon>
+                    <i class="fas fa-calendar-day"></i>
+                </template>
+            </DateInput>
+        </div>
 
         <!-- Task Description -->
         <TextArea
@@ -36,7 +49,11 @@
             label="Description"
             placeholder="Task Description"
             :error="form.errors.description"
-        />
+        >
+            <template #icon>
+                <i class="fas fa-align-left"></i>
+            </template>
+        </TextArea>
 
         <!-- Task Details -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -46,7 +63,11 @@
                 label="Status"
                 :options="statusOptions"
                 :error="form.errors.status"
-            />
+            >
+                <template #icon>
+                    <i class="fas fa-chart-line"></i>
+                </template>
+            </SelectInput>
 
             <SelectInput
                 id="priority"
@@ -54,7 +75,11 @@
                 label="Priority"
                 :options="priorityOptions"
                 :error="form.errors.priority"
-            />
+            >
+                <template #icon>
+                    <i class="fas fa-flag"></i>
+                </template>
+            </SelectInput>
         </div>
 
         <!-- Editable Notes -->
@@ -65,21 +90,31 @@
             placeholder="Enter any additional notes"
             rows="4"
             :error="form.errors.notes"
-        />
+        >
+            <template #icon>
+                <i class="fas fa-sticky-note"></i>
+            </template>
+        </TextArea>
 
         <!-- Attachments Section -->
         <div class="mt-6">
-            <NormalButton label="Manage Attachments" @click="toggleModal" />
+            <ButtonWithIcon
+                class="btn btn-outline btn-info"
+                icon="fas fa-paperclip"
+                label="Manage Attachments"
+                @click="toggleModal"
+            />
         </div>
 
         <!-- Task Actions -->
         <div class="card-actions justify-end mt-6">
-            <NormalButton
+            <ButtonWithIcon
                 type="submit"
-                label="Save Changes"
                 :loading="form.processing"
                 :disabled="form.processing"
-                :custom-class="'bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white'"
+                icon="fas fa-save"
+                label="Save Changes"
+                custom-class="btn btn-primary"
             />
         </div>
 
@@ -105,12 +140,12 @@ import TextInput from '@/components/inputs/TextInput.vue'
 import TextArea from '@/components/inputs/TextArea.vue'
 import SelectInput from '@/components/inputs/SelectInput.vue'
 import DateInput from '@/components/inputs/DateInput.vue'
-import NormalButton from '@/components/buttons/NormalButton.vue'
+import ButtonWithIcon from '@/components/buttons/ButtonWithIcon.vue'
 import SpanError from '@/components/common/SpanError.vue'
 import SpanSuccess from '@/components/common/SpanSuccess.vue'
 import AttachmentModal from '@/components/ui/AttachmentModal.vue'
-import { TaskStatus } from '../../enums/taskStatus'
-import { TaskPriority } from '../../enums/taskPriority'
+import { TaskStatus } from '@/enums/taskStatus'
+import { TaskPriority } from '@/enums/taskPriority'
 
 export default {
     name: 'TaskDetailsForm',
@@ -119,7 +154,7 @@ export default {
         TextArea,
         SelectInput,
         DateInput,
-        NormalButton,
+        ButtonWithIcon,
         SpanError,
         SpanSuccess,
         AttachmentModal
@@ -151,6 +186,20 @@ export default {
         const formattedCreatedAt = computed(() => formatCreatedAt(props.task.created_at))
         const timeRemaining = ref(calculateTimeRemaining(form.deadline))
         const timeRemainingClass = computed(() => getTimeRemainingClass(form.deadline))
+
+        const statusOptions = computed(() =>
+            Object.values(TaskStatus).map((status) => ({
+                value: status,
+                label: formatStatusLabel(status)
+            }))
+        )
+
+        const priorityOptions = computed(() =>
+            Object.values(TaskPriority).map((priority) => ({
+                value: priority,
+                label: formatPriorityLabel(priority)
+            }))
+        )
 
         watch(
             () => form.deadline,
@@ -191,16 +240,6 @@ export default {
             })
         })
 
-        const statusOptions = Object.values(TaskStatus).map((status) => ({
-            value: status,
-            label: formatStatusLabel(status)
-        }))
-
-        const priorityOptions = Object.values(TaskPriority).map((priority) => ({
-            value: priority,
-            label: formatPriorityLabel(priority)
-        }))
-
         function handleSubmit() {
             form.put(route('task.update', form.id), {
                 preserveState: true,
@@ -228,19 +267,6 @@ export default {
             showModal.value = !showModal.value
         }
 
-        function getBorderColorClass(status) {
-            switch (status) {
-                case TaskStatus.TODO:
-                    return 'border-yellow-400'
-                case TaskStatus.IN_PROGRESS:
-                    return 'border-blue-400'
-                case TaskStatus.COMPLETED:
-                    return 'border-green-400'
-                default:
-                    return 'border-gray-400'
-            }
-        }
-
         return {
             form,
             minDate,
@@ -256,6 +282,7 @@ export default {
     }
 }
 
+// Utility functions (unchanged)
 function getMinDate() {
     return new Date(Date.now() + 86400000).toISOString().split('T')[0]
 }
@@ -311,5 +338,18 @@ function formatPriorityLabel(priority) {
         [TaskPriority.HIGH]: 'High'
     }
     return labels[priority] || priority
+}
+
+function getBorderColorClass(status) {
+    switch (status) {
+        case TaskStatus.TODO:
+            return 'border-yellow-400'
+        case TaskStatus.IN_PROGRESS:
+            return 'border-blue-400'
+        case TaskStatus.COMPLETED:
+            return 'border-green-400'
+        default:
+            return 'border-gray-400'
+    }
 }
 </script>
