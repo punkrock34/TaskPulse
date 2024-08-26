@@ -4,7 +4,6 @@
             <a href="/" class="text-2xl font-bold">TaskPulse</a>
             <div class="flex items-center space-x-4">
                 <ThemeToggle />
-                <NotificationDropdown />
                 <!-- Add Task Icon -->
                 <a
                     class="text-xl text-gray-900 dark:text-white cursor-pointer"
@@ -37,13 +36,11 @@ import { computed } from 'vue'
 import { usePage } from '@inertiajs/vue3'
 import { Inertia } from '@inertiajs/inertia'
 import ThemeToggle from './ThemeToggleComponent.vue'
-import NotificationDropdown from './NotificationDropdown.vue'
 
 export default {
     name: 'AuthenticatedHeader',
     components: {
-        ThemeToggle,
-        NotificationDropdown
+        ThemeToggle
     },
     setup() {
         const page = usePage()

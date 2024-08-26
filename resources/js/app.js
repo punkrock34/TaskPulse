@@ -5,7 +5,6 @@ import { createApp, h } from 'vue'
 import { createInertiaApp } from '@inertiajs/vue3'
 
 import { ZiggyVue } from 'ziggy-js'
-import store from './store'
 
 // Set up axios CSRF token
 axios.defaults.headers.common['X-CSRF-TOKEN'] = document
@@ -22,7 +21,6 @@ createInertiaApp({
     },
     setup({ el, App, props, plugin }) {
         createApp({ render: () => h(App, props) })
-            .use(store)
             .use(ZiggyVue, plugin)
             .mount(el)
     }
