@@ -197,7 +197,7 @@ After installing the prerequisites and cloning the repository, follow these step
     ddev npm install --no-progress
     ```
 
-    Note: The `--no-progress` flag is used to speed up the npm install process by disabling the progress bar. This can significantly reduce installation time, especially on the first run or in certain environments where the progress bar might cause slowdowns.
+    Note: If `ddev npm install` hangs, it may be due to a [known npm issue](https://github.com/npm/cli/issues/4028). As a workaround, try opening a new terminal, removing the node_modules folder, and running `ddev npm install` again.
 
 12. Run Vite (in a secondary terminal):
 

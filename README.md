@@ -9,10 +9,11 @@ TaskPulse is a modern, efficient task management web application built with Lara
 
 ## 🌟 Features
 
-- **User Authentication**: Secure login and registration powered by Firebase
-- **Task Management**: Create, read, update, and delete tasks with ease
-- **Task Categorization**: Organize tasks with labels and status indicators
-- **Responsive Design**: A clean, intuitive interface that works on desktop and mobile
+- **Secure Authentication**: Powered by Firebase for reliable user login and registration
+- **Comprehensive Task Management**: Easily create and update tasks
+- **Attachment Support**: Seamlessly add and remove attachments within tasks
+- **Intelligent Categorization**: Prioritize and track tasks with priority labels and status indicators
+- **Responsive Design**: Enjoy a clean, intuitive interface optimized for both desktop and mobile
 
 ## 🚀 Quick Start
 
@@ -21,15 +22,16 @@ TaskPulse is a modern, efficient task management web application built with Lara
 3. **Setup**:
 
    ```sh
-   cd taskpulse
    ddev start
    cp .env.example .env
-   ddev composer update && ddev npm install --no-progress
+   ddev composer update
+   ddev npm install --no-progress
    ddev artisan key:generate
    ddev artisan migrate
    ```
 
-   💡 The `--no-progress` flag speeds up npm install by disabling the progress bar.
+   💡 If `ddev npm install` hangs, it may be due to a [known npm issue](https://github.com/npm/cli/issues/4028). As a workaround, try opening a new terminal, removing the node_modules folder, and running `ddev npm install` again.
+
 
 4. **Configure Firebase**:
    - Download `firebase_credentials.json` from [Firebase Console](https://console.firebase.google.com/)
