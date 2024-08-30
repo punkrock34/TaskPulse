@@ -33,8 +33,7 @@
 <script>
 import { route } from 'ziggy-js'
 import { computed } from 'vue'
-import { usePage } from '@inertiajs/vue3'
-import { Inertia } from '@inertiajs/inertia'
+import { usePage, router } from '@inertiajs/vue3'
 import ThemeToggle from './ThemeToggleComponent.vue'
 
 export default {
@@ -54,11 +53,11 @@ export default {
         })
 
         const logout = () => {
-            Inertia.post(route('logout.store'))
+            router.post(route('logout.store'))
         }
 
         const addTask = () => {
-            Inertia.visit(route('create-task.index'))
+            router.visit(route('create-task.index'))
         }
 
         return {

@@ -63,7 +63,7 @@
 
 <script>
 import { route } from 'ziggy-js'
-import { useForm } from '@inertiajs/vue3'
+import { useForm, router } from '@inertiajs/vue3'
 import TextInput from '@/components/inputs/TextInput.vue'
 import PasswordInput from '@/components/inputs/PasswordInput.vue'
 import CheckboxInput from '@/components/inputs/CheckboxInput.vue'
@@ -72,7 +72,6 @@ import SpanError from '@/components/common/SpanError.vue'
 import SpanWithActionLink from '@/components/common/SpanWithActionLink.vue'
 import PasswordStrengthIndicator from '@/components/common/PasswordStrengthIndicator.vue'
 import { ref } from 'vue'
-import { Inertia } from '@inertiajs/inertia'
 
 export default {
     name: 'RegisterForm',
@@ -111,7 +110,7 @@ export default {
         }
 
         const forgotPassword = async () => {
-            Inertia.visit(route('forgot-password.index'))
+            router.visit(route('forgot-password.index'))
         }
 
         return {
