@@ -5,7 +5,7 @@ Thanks for your interest in contributing to TaskPulse! Here's a quick guide to g
 ## Getting Started
 
 1. Fork the repository
-2. Clone your fork: `git clone https://github.com/punkrock34/TaskPulse.git`
+2. Clone your fork: `git clone https://github.com/your-username/TaskPulse.git`
 3. Create a new branch: `git checkout -b feature/your-feature-name`
 
 ## Setting Up the Development Environment
