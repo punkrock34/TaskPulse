@@ -194,8 +194,10 @@ After installing the prerequisites and cloning the repository, follow these step
 11. Install NPM dependencies:
 
     ```sh
-    ddev npm install
+    ddev npm install --no-progress
     ```
+
+    Note: The `--no-progress` flag is used to speed up the npm install process by disabling the progress bar. This can significantly reduce installation time, especially on the first run or in certain environments where the progress bar might cause slowdowns.
 
 12. Run Vite (in a secondary terminal):
 

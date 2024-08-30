@@ -24,10 +24,12 @@ TaskPulse is a modern, efficient task management web application built with Lara
    cd taskpulse
    ddev start
    cp .env.example .env
-   ddev composer update && ddev npm install
+   ddev composer update && ddev npm install --no-progress
    ddev artisan key:generate
    ddev artisan migrate
    ```
+
+   💡 The `--no-progress` flag speeds up npm install by disabling the progress bar.
 
 4. **Configure Firebase**:
    - Download `firebase_credentials.json` from [Firebase Console](https://console.firebase.google.com/)
