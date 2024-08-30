@@ -50,16 +50,16 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/attachments', [TaskAttachmentController::class, 'store'])->name('attachments.store');
     Route::delete('/attachments/{attachment}', [TaskAttachmentController::class, 'destroy'])->name('attachments.destroy');
+
+    Route::get('/storage/task-attachments/{fileName}', function ($fileName) {
+        $path = Storage::disk('public')->path("task-attachments/$fileName");
+        if (! Storage::disk('public')->exists("task-attachments/$fileName")) {
+            abort(404);
+        }
+
+        return response()->file($path);
+    })->middleware(CheckFilePermission::class)->name('attachments.show');
 });
-
-Route::get('/storage/task-attachments/{fileName}', function ($fileName) {
-    $path = Storage::disk('public')->path("task-attachments/$fileName");
-    if (! Storage::disk('public')->exists("task-attachments/$fileName")) {
-        abort(404);
-    }
-
-    return response()->file($path);
-})->middleware('auth', CheckFilePermission::class)->name('attachments.show');
 
 // not found page
 Route::get('/{any}', function () {

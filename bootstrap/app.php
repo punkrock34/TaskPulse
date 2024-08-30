@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Middleware\ForceJsonResponse;
 use App\Http\Middleware\HandleInertiaRequests;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -17,9 +16,6 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->web(append: [
             HandleInertiaRequests::class,
-        ]);
-        $middleware->api(prepend: [
-            ForceJsonResponse::class,
         ]);
         $middleware->redirectGuestsTo(fn () => route('login.index'));
         $middleware->statefulApi();
