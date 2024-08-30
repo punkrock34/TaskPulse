@@ -1,123 +1,139 @@
-# Installation Guide
+# TaskPulse Installation Guide
 
 ## Prerequisites
 
-- ddev
 - Docker
+- DDEV
 
 ## Detailed Installation Steps
 
-### Windows
+### 1. Install Docker
 
-1. **Install Docker Desktop for Windows:**
-   - Download Docker Desktop from the [official Docker website](https://www.docker.com/products/docker-desktop).
-   - Run the installer and follow the on-screen instructions.
-   - After installation, start Docker Desktop from the Start menu.
-   - Verify the installation by running `docker --version` in Command Prompt or PowerShell.
+#### Windows
 
-2. **Install ddev:**
-   - Download the ddev Windows installer from the [ddev releases page](https://github.com/drud/ddev/releases).
-   - Run the installer and follow the on-screen instructions.
-   - Verify the installation by running `ddev version` in Command Prompt or PowerShell.
+- Download and install Docker Desktop from the [official Docker website](https://www.docker.com/products/docker-desktop).
+- Follow the on-screen instructions to complete the installation.
+- Start Docker Desktop from the Start menu.
+- Verify the installation: Run `docker --version` in Command Prompt or PowerShell.
 
-### macOS
+#### macOS
 
-1. **Install Docker:**
-   - Use Homebrew to install Docker:
+- Use Homebrew to install Docker:
 
-     ```sh
-     brew install --cask docker
-     ```
+  ```sh
+  brew install --cask docker
+  ```
 
-   - Start Docker from the Applications folder.
-   - Verify the installation by running `docker --version` in the terminal.
+- Start Docker from the Applications folder.
+- Verify the installation: Run `docker --version` in the terminal.
 
-2. **Install ddev:**
-   - **Using Homebrew:**
+#### Linux
 
-     ```sh
-     brew install ddev/ddev/ddev
-     ```
+- Follow the [official Docker installation guide for Linux](https://docs.docker.com/engine/install/#server).
+- After installation, start Docker: `sudo systemctl start docker`
+- Verify the installation: Run `docker --version` in the terminal.
 
-   - **Using Install Script:**
+### 2. Install DDEV
 
-     ```sh
-     curl -fsSL https://ddev.com/install.sh | bash
-     ```
+#### Windows
 
-   - One-time initialization of mkcert:
+- Download the DDEV Windows installer from the [DDEV releases page](https://github.com/drud/ddev/releases).
+- Run the installer and follow the on-screen instructions.
+- Verify the installation: Run `ddev version` in Command Prompt or PowerShell.
 
-     ```sh
-     mkcert -install
-     ```
+#### macOS
 
-   - Verify the installation by running `ddev version` in the terminal.
+Choose one of the following methods:
 
-### Linux
+- Using Homebrew:
 
-1. **Install Docker:**
-   - Follow the [official Docker installation guide for Linux](https://docs.docker.com/engine/install/#server).
-   - After installation, start Docker using `sudo systemctl start docker`.
-   - Verify the installation by running `docker --version` in the terminal.
+  ```sh
+  brew install ddev/ddev/ddev
+  ```
 
-2. **Install ddev:**
-   - **Debian/Ubuntu:**
+- Using Install Script:
 
-     ```sh
-     sudo apt-get update && sudo apt-get install -y curl
-     sudo install -m 0755 -d /etc/apt/keyrings
-     curl -fsSL https://pkg.ddev.com/apt/gpg.key | gpg --dearmor | sudo tee /etc/apt/keyrings/ddev.gpg > /dev/null
-     sudo chmod a+r /etc/apt/keyrings/ddev.gpg
-     echo "deb [signed-by=/etc/apt/keyrings/ddev.gpg] https://pkg.ddev.com/apt/ * *" | sudo tee /etc/apt/sources.list.d/ddev.list >/dev/null
-     sudo apt-get update && sudo apt-get install -y ddev
-     mkcert -install
-     ```
+  ```sh
+  curl -fsSL https://ddev.com/install.sh | bash
+  ```
 
-   - **Fedora, Red Hat, etc.:**
+- One-time initialization of mkcert:
 
-     ```sh
-     echo '[ddev]
-     name=ddev
-     baseurl=https://pkg.ddev.com/yum/
-     gpgcheck=0
-     enabled=1' | perl -p -e 's/^ +//' | sudo tee /etc/yum.repos.d/ddev.repo >/dev/null
-     sudo dnf install --refresh ddev
-     mkcert -install
-     ```
+  ```sh
+  mkcert -install
+  ```
 
-   - **Arch Linux:**
+- Verify the installation: Run `ddev version` in the terminal.
 
-     ```sh
-     yay -S ddev-bin
-     mkcert -install
-     ```
+#### Linux
 
-   - **Using Install Script:**
+Choose the appropriate method for your distribution:
 
-     ```sh
-     curl -fsSL https://ddev.com/install.sh | bash
-     ```
+- Debian/Ubuntu:
 
-   - Verify the installation by running `ddev version` in the terminal.
+  ```sh
+  sudo apt-get update && sudo apt-get install -y curl
+  sudo install -m 0755 -d /etc/apt/keyrings
+  curl -fsSL https://pkg.ddev.com/apt/gpg.key | gpg --dearmor | sudo tee /etc/apt/keyrings/ddev.gpg > /dev/null
+  sudo chmod a+r /etc/apt/keyrings/ddev.gpg
+  echo "deb [signed-by=/etc/apt/keyrings/ddev.gpg] https://pkg.ddev.com/apt/ * *" | sudo tee /etc/apt/sources.list.d/ddev.list >/dev/null
+  sudo apt-get update && sudo apt-get install -y ddev
+  mkcert -install
+  ```
 
-## Environment Setup
+- Fedora, Red Hat, etc.:
 
-After installing the prerequisites and cloning the repository, follow these steps to set up the project environment:
+  ```sh
+  echo '[ddev]
+  name=ddev
+  baseurl=https://pkg.ddev.com/yum/
+  gpgcheck=0
+  enabled=1' | perl -p -e 's/^ +//' | sudo tee /etc/yum.repos.d/ddev.repo >/dev/null
+  sudo dnf install --refresh ddev
+  mkcert -install
+  ```
 
-1. **Copy the example environment file:**
+- Arch Linux:
 
-    ```sh
-    cp .env.example .env
-    ```
+  ```sh
+  yay -S ddev-bin
+  mkcert -install
+  ```
 
-2. **Obtain Firebase credentials:**
-   - Go to the Firebase Console and navigate to your project.
+- Using Install Script (all distributions):
+
+  ```sh
+  curl -fsSL https://ddev.com/install.sh | bash
+  ```
+
+Verify the installation: Run `ddev version` in the terminal.
+
+## Project Setup
+
+After installing the prerequisites and cloning the repository, follow these steps:
+
+1. Copy the example environment file:
+
+   ```sh
+   cp .env.example .env
+   ```
+
+2. Set up a Firebase project:
+   - Go to the [Firebase Console](https://console.firebase.google.com/) and create a new project or select an existing one.
+   - Navigate to your project settings.
    - Download the `firebase_credentials.json` file.
    - Place the `firebase_credentials.json` file in the `storage/app/firebase` directory of your project.
 
-3. **Add Firebase credentials to .env:**
-   - Open the `.env` file.
-   - Add the following environment variables, replacing the placeholders with the values from your Firebase project:
+3. (Optional) Enable Google Sign-In for Firebase:
+   If you want to use Google Sign-In in your application, follow these steps:
+   - In the [Firebase Console](https://console.firebase.google.com/), go to Authentication > Sign-in method.
+   - Enable the Google sign-in provider.
+   - Add your application's domain (e.g., taskpulse.ddev.site) to the authorized domains list in Firebase Authentication settings.
+
+   Note: If you don't need Google Sign-In, you can skip this step. The application will still use Firebase for email/password authentication, but the login/sign in with firebase will not work!
+
+4. Add Firebase credentials to .env:
+   - Open the `.env` file and add the following, replacing placeholders with your Firebase project details:
 
      ```env
      VITE_FIREBASE_API_KEY=<your-firebase-api-key>
@@ -129,8 +145,8 @@ After installing the prerequisites and cloning the repository, follow these step
      VITE_FIREBASE_MEASUREMENT_ID=<your-firebase-measurement-id>
      ```
 
-4. **(Optional) Configure Mail settings:**
-   - If you want to use Mailhog with `ddev`, add these variables to your `.env` file:
+5. (Optional) Configure Mail settings:
+   - If you want to use Mailhog with `ddev`, add these to your `.env` file:
 
      ```env
      MAIL_MAILER="smtp"
@@ -143,165 +159,172 @@ After installing the prerequisites and cloning the repository, follow these step
      MAIL_FROM_NAME="${APP_NAME}"
      ```
 
-5. **Start the ddev environment:**
+6. Start the DDEV environment:
 
-    ```sh
-    ddev start
-    ```
+   ```sh
+   ddev start
+   ```
 
-6. **Install Composer dependencies:**
+7. Install Composer dependencies:
 
-    ```sh
-    ddev composer update
-    ```
+   ```sh
+   ddev composer update
+   ```
 
-7. **Generate application key:**
+8. Generate application key:
 
-    ```sh
-    ddev artisan key:generate
-    ```
+   ```sh
+   ddev artisan key:generate
+   ```
 
-8. **Configure settings:**
-   - Open the `.env` file and replace where needed.
+9. Run database migrations:
 
-9. **Run tests to verify setup:**
+   ```sh
+   ddev artisan migrate
+   ```
+
+   This step creates the necessary database tables. If skipped, you may encounter a SQLSTATE[42S02] error.
+
+10. Run tests to verify setup:
 
     ```sh
     ddev artisan test
     ```
 
-10 **Install NPM dependencies:**
+11. Install NPM dependencies:
 
     ```sh
     ddev npm install
     ```
 
-11. **In a secondary terminal window, run Vite:**
+12. Run Vite (in a secondary terminal):
 
     ```sh
     ddev npm run dev
     ```
 
-12. **Launch the application:**
+13. Launch the application:
 
     ```sh
     ddev launch
     ```
 
-    This command will open the application in your default web browser. The URL should match the APP_URL in your `.env` file.
+    This opens the application in your default web browser. The URL should match the APP_URL in your `.env` file.
 
-13. **Database management (optional):**
+## Database Management
 
-    To interact with the database, you can use:
+### CLI Access
 
-    ```sh
-    ddev mysql    
-    ```
+To interact with the database via CLI:
 
-## Database GUIs
+```sh
+ddev mysql
+```
 
-For managing your databases, you can use various GUI clients. Below are instructions for setting up **HeidiSQL** and **phpMyAdmin**.
+### GUI Options
 
-### HeidiSQL (Windows only, can be used via WSL as well)
+#### HeidiSQL (Windows only, can be used via WSL)
 
-HeidiSQL is a lightweight and easy-to-use database client for Windows, which can also be used with WSL2.
+1. Install HeidiSQL:
+   - Download and install HeidiSQL from the [official website](https://www.heidisql.com/download.php).
+   - Follow the installation instructions provided on the website.
 
-1. **Install HeidiSQL:**
-    - Download the installation file by running the following command within your `ddev` environment:
+2. Launch HeidiSQL with DDEV:
+   - Once HeidiSQL is installed, you can use DDEV to launch it with the correct connection details:
 
-      ```sh
-      ddev heidisql
-      ```
+     ```sh
+     ddev heidisql
+     ```
 
-    - Alternatively, you can download it directly from the [official website](https://www.heidisql.com/download.php).
+   - This command will open HeidiSQL with the connection details for your DDEV project's database.
 
-2. **Launch HeidiSQL:**
-    - Once installed, you can connect to your database by entering the connection details provided by `ddev describe`. HeidiSQL will allow you to interact with your databases directly from a graphical interface.
+3. Manual Connection:
+   - Alternatively, you can launch HeidiSQL manually and connect using the details from:
 
-### phpMyAdmin
+     ```sh
+     ddev describe
+     ```
 
-`phpMyAdmin` is a widely-used web interface for managing MySQL and MariaDB databases.
+   - Use the provided host, username, password, and port to set up the connection in HeidiSQL.
 
-1. **Install ddev-phpmyadmin:**
-    - To add phpMyAdmin to your project, run the following command:
+Note: The `ddev heidisql` only launches the already installed application with the appropriate connection details for your DDEV project.
 
-      ```sh
-      ddev get ddev/ddev-phpmyadmin
-      ```
+#### phpMyAdmin
 
-2. **Restart ddev:**
-    - After installing phpMyAdmin, you need to restart `ddev` for the changes to take effect:
+1. Install ddev-phpmyadmin:
 
-      ```sh
-      ddev restart
-      ```
+   ```sh
+   ddev get ddev/ddev-phpmyadmin
+   ```
 
-3. **Launch phpMyAdmin:**
-    - Access phpMyAdmin through your browser with the following command:
+2. Restart DDEV:
 
-      ```sh
-      ddev phpmyadmin
-      ```
+   ```sh
+   ddev restart
+   ```
 
-    - This will open phpMyAdmin where you can manage your databases using a web interface.
+3. Launch phpMyAdmin:
 
-### Other GUI Clients
+   ```sh
+   ddev phpmyadmin
+   ```
 
-If you prefer other GUI database clients, here are some alternatives:
+#### Other GUI Clients
 
-- **Sequel Ace** (macOS): Launch it with `ddev sequelace` (must be installed).
-- **TablePlus** (macOS): Launch it with `ddev tableplus` (must be installed).
-- **Querious** (macOS): Launch it with `ddev querious` (must be installed).
-- **DBeaver** (WSL2, Linux, macOS): Launch it with `ddev dbeaver` (must be installed).
-- **PhpStorm**: PhpStorm and other JetBrains tools have a built-in database browser. If you're using the DDEV Integration plugin, this setup is automatic.
+- Sequel Ace (macOS): `ddev sequelace`
+- TablePlus (macOS): `ddev tableplus`
+- Querious (macOS): `ddev querious`
+- DBeaver (WSL2, Linux, macOS): `ddev dbeaver`
+- PhpStorm: Built-in database browser (automatic setup with DDEV Integration plugin)
 
 ### Custom Database Ports
 
-For projects where you want to use a static host database port, you can set this in your `ddev` configuration:
+To use a static host database port:
 
-1. **Set a static port:**
-   - In your `ddev` configuration, add the following line under the `database` service:
+1. In your DDEV configuration, add:
 
-     ```sh
-     host_db_port: 59002
-     ```
+   ```yaml
+   host_db_port: 59002
+   ```
 
-     Replace `59002` with any port number of your choice, ensuring it doesn't conflict with other services.
+   Replace 59002 with your preferred port.
 
-2. **Apply the changes:**
-   - Run `ddev start` to apply the changes and make the port available.
+2. Apply changes:
+
+   ```sh
+   ddev start
+   ```
 
 ### MySQL Workbench
 
-There is a sample custom command in `ddev` that allows you to run MySQL Workbench:
+1. Set up MySQL Workbench:
 
-1. **Set up MySQL Workbench:**
-   - Copy the sample command:
+   ```sh
+   cp ~/.ddev/commands/host/mysqlworkbench.example ~/.ddev/commands/host/mysqlworkbench
+   ```
 
-     ```sh
-     cp ~/.ddev/commands/host/mysqlworkbench.example ~/.ddev/commands/host/mysqlworkbench
-     ```
+2. Launch MySQL Workbench:
 
-2. **Launch MySQL Workbench:**
-   - Run the command:
+   ```sh
+   ddev mysqlworkbench
+   ```
 
-     ```sh
-     ddev mysqlworkbench
-     ```
+## Troubleshooting
 
-   - This will open MySQL Workbench if it’s installed on your system.
+If you encounter issues:
 
-3. Continue with the remaining steps in the installation guide.
+1. Restart the DDEV environment:
 
-Please note that these updated steps are applicable starting from 2024. Make sure to follow these instructions to ensure a smooth installation process.
+   ```sh
+   ddev restart
+   ```
 
-After completing these steps, your TaskPulse environment should be ready for development. The `ddev launch` command will open the application in your default web browser.
+2. Clear Laravel caches:
 
-## Additional Configuration
+   ```sh
+   ddev artisan cache:clear
+   ddev artisan config:clear
+   ddev artisan view:clear
+   ```
 
-1. **Configure environment variables:**
-Open the `.env` file in a text editor and update the following variables if needed:
-
-- `APP_NAME`: Set to "TaskPulse" or your preferred application name
-- `APP_URL`: This should be automatically set by ddev
-- `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`: These should be automatically set by ddev
+If problems persist, check the project's issue tracker or create a new issue.

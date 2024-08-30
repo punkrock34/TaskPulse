@@ -1,52 +1,74 @@
 # TaskPulse
 
-TaskPulse is a web application built with Laravel and Vite, utilizing ddev for local development. It helps manage tasks efficiently with a user-friendly interface.
+![Laravel](https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)
+![Vue.js](https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vue.js&logoColor=4FC08D)
+![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 
-## Features
+TaskPulse is a modern, efficient task management web application built with Laravel and Vue.js. It leverages Firebase for authentication and Docker (via DDEV) for easy local development.
 
-- User Authentication and Authorization via Firebase
-- Task CRUD operations
-- Task labeling
-- Task status
+## 🌟 Features
 
-## Quick Start
+- **User Authentication**: Secure login and registration powered by Firebase
+- **Task Management**: Create, read, update, and delete tasks with ease
+- **Task Categorization**: Organize tasks with labels and status indicators
+- **Responsive Design**: A clean, intuitive interface that works on desktop and mobile
 
-1. Install prerequisites: ddev and Docker
-2. Clone the repository: `git clone https://github.com/punkrock34/TaskPulse.git`
-3. Navigate to the project directory: `cd taskpulse`
-4. Start the ddev environment: `ddev start`
-5. Install dependencies: `ddev composer update && ddev npm install`
-6. Copy the environment file: `cp .env.example .env`
-7. **Obtain Firebase credentials**:
-   - Download `firebase_credentials.json` from the Firebase Console and place it in the `storage/app/firebase` directory.
-   - Add Firebase credentials to `.env` as described in the Environment Setup section.
-8. **Configure Mail settings (optional)**:
-   - Add Mail settings to `.env` as described in the Environment Setup section.
-9. Launch the application:
+## 🚀 Quick Start
+
+1. **Prerequisites**: Install [DDEV](https://ddev.readthedocs.io/en/stable/) and [Docker](https://www.docker.com/get-started)
+2. **Clone**: `git clone https://github.com/punkrock34/TaskPulse.git`
+3. **Setup**:
+
+   ```sh
+   cd taskpulse
+   ddev start
+   cp .env.example .env
+   ddev composer update && ddev npm install
+   ddev artisan key:generate
+   ddev artisan migrate
+   ```
+
+4. **Configure Firebase**:
+   - Download `firebase_credentials.json` from [Firebase Console](https://console.firebase.google.com/)
+   - Place it in `storage/app/firebase/`
+   - Update `.env` with Firebase credentials
+5. **Run**:
    - Terminal 1: `ddev npm run dev`
-   - Terminal 2: `ddev launch` or go to [https://taskpulse.ddev.site](https://taskpulse.ddev.site)
+   - Terminal 2: `ddev launch`
 
-For detailed setup instructions and documentation, please refer to the [docs](./docs) folder.
+Visit [https://taskpulse.ddev.site](https://taskpulse.ddev.site) to see your app in action!
 
-## Documentation
+For detailed instructions, check the [Installation Guide](./docs/installation.md).
 
-- [Installation Guide](./docs/installation.md)
-- [Development Setup](./docs/development.md)
+## 📚 Documentation
 
-## Technologies Used
+- [Installation Guide](./docs/installation.md): Detailed setup instructions
+- [Development Setup](./docs/development.md): Guide for developers
+- [Resources](./docs/resources.md): Links to documentation for all technologies used in this project
+- [Contributing Guidelines](./CONTRIBUTING.md): How to contribute to the project
 
-- Laravel
-- Vite
-- Vue
-- Inertia
-- Firebase
-- Docker
-- DDEV
+## 🛠 Technologies
 
-## Contributing
+- **Backend**: Laravel, PHP
+- **Frontend**: Vue.js, Inertia.js
+- **Build Tool**: Vite
+- **Authentication**: Firebase
+- **Database**: MySQL (via DDEV)
+- **Development Environment**: Docker, DDEV
 
-Contributions are welcome! Please fork the repository and submit pull requests.
+## 🤝 Contributing
 
-## License
+We welcome contributions! Please see our [Contributing Guidelines](./CONTRIBUTING.md) for more details on how to get started.
+
+## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](./LICENSE.md) file for details.
+
+## 📞 Support
+
+If you encounter any problems or have questions, please [open an issue](https://github.com/punkrock34/TaskPulse/issues/new) on GitHub.
+
+---
+
+Made with ❤️ by [punkrock34](https://github.com/punkrock34) as a university project
