@@ -25,7 +25,7 @@ TaskPulse is a modern, efficient task management web application built with Lara
    ddev start
    cp .env.example .env
    ddev composer update
-   ddev npm install --no-progress
+   ddev npm install
    ddev artisan key:generate
    ddev artisan migrate
    ```
